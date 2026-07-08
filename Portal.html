@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>J&M Leadership & Management Limited</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- ADMIN -->
+<section id="admin">
+<div class="container">
+<h2 class="title">Admin Dashboard</h2>
+
+<div class="grid">
+<div class="card">View Students</div>
+<div class="card">Add Courses</div>
+<div class="card">Upload Videos</div>
+<div class="card">Upload Audios</div>
+<div class="card">Upload PDFs</div>
+<div class="card">Approve Payments</div>
+<div class="card">View Exams</div>
+<div class="card">Issue Certificates</div>
+</div>
+</div>
+</section>
+
+<!-- STUDENT PORTAL -->
+<section id="portal">
+<div class="container">
+<h2 class="title">Student Portal</h2>
+
+<div class="portal">
+
+<div class="sidebar">
+<h3>Portal Menu</h3>
+<a href="#">Registration</a>
+<a href="#">My Courses</a>
+<a href="#">Modules</a>
+<a href="#">Final Exam</a>
+<a href="#">Certificate</a>
+<a href="#">Advisor Chat</a>
+<a href="#">Payments</a>
+</div>
+
+<div class="dashboard">
+
+<!-- Registration -->
+<div class="card">
+<h3>Student Registration</h3>
+
+<label>Full Name</label>
+<input type="text" id="fullname" placeholder="Enter full name">
+
+<div class="two">
+<div>
+<label>Email</label>
+<input type="email" placeholder="Email">
+</div>
+<div>
+<label>Phone</label>
+<input type="text" placeholder="Phone">
+</div>
+</div>
+
+<label>Password</label>
+<input type="password" placeholder="Password">
+
+<br><br>
+<button class="btn btn-gold" onclick="generateStudent()">Register Student</button>
+
+<p class="small" id="studentInfo"></p>
+</div>
+
+
+</body>
+</html>
