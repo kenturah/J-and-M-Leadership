@@ -1,20 +1,36 @@
-// function generateStudent() {
-//   let name = document.getElementById("fullname").value;
-//   if (name === "") {
-//     alert("Enter full name");
-//     return;
-//   }
-//   let username =
-//     name.toLowerCase().replace(/\s/g, "") + Math.floor(Math.random() * 100);
-//   let id = "JML" + Math.floor(10000 + Math.random() * 90000);
+// ---- Render Lucide icons (runs after the Lucide CDN script has loaded) ----
+lucide.createIcons();
 
-//   document.getElementById("studentInfo").innerHTML =
-//     "Registered Successfully! Username: <strong>" +
-//     username +
-//     "</strong> | Student ID: <strong>" +
-//     id +
-//     "</strong>";
-// }
+// ---- Mobile nav: hamburger toggle, close on link click, lock scroll while open ----
+const navToggle = document.getElementById("navToggle");
+const navLinks = document.getElementById("navLinks");
+
+function openNav() {
+  navLinks.classList.add("open");
+  navToggle.setAttribute("aria-expanded", "true");
+  document.body.classList.add("nav-open");
+}
+
+function closeNav() {
+  navLinks.classList.remove("open");
+  navToggle.setAttribute("aria-expanded", "false");
+  document.body.classList.remove("nav-open");
+}
+
+navToggle?.addEventListener("click", () => {
+  const isOpen = navLinks.classList.contains("open");
+  isOpen ? closeNav() : openNav();
+});
+
+// Tapping a link (including the mobile "Enroll Now" button) closes the menu
+navLinks?.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", closeNav);
+});
+
+// Avoid a stuck-open overlay if the screen is resized/rotated past the mobile breakpoint
+window.addEventListener("resize", () => {
+  if (window.innerWidth > 950) closeNav();
+});
 
 // ---- Session options per level. Edit dates here once confirmed — everything else updates automatically. ----
 const SESSIONS_BY_LEVEL = {
@@ -44,11 +60,12 @@ function populateSessions(level) {
   sessionSelect.innerHTML =
     '<option value="">Select a session</option>' +
     options
-      .map((o) => `<option value="${o.value}">${o.label}</option>`)
+      .map(
+        (option) => `<option value="${option.value}">${option.label}</option>`,
+      )
       .join("");
   sessionSelect.disabled = false;
 }
-
 // ---- Course "Enroll" buttons: preselect the course/level + sessions, then scroll to the form ----
 document.querySelectorAll(".btn-enroll").forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -68,19 +85,28 @@ document.querySelectorAll(".btn-enroll").forEach((btn) => {
 
 // ---- Manual course dropdown change also updates the session options ----
 document.getElementById("courseSelect")?.addEventListener("change", (e) => {
-  const level = e.target.value.split("-")[1]; // "Leadership-Basic" -> "Basic"
+  const level = e.target.value.split("-")[1];
   populateSessions(level);
 });
 
+// ----- supabase setup -----
+const SUPABASE_URL = "https://jqnhjuxvfvrodymqnnfb.supabase.co";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxbmhqdXh2ZnZyb2R5bXFubmZiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3NzU2MTQsImV4cCI6MjA5OTM1MTYxNH0.zFnapvdoPjzhGb7IQ3_w_vxja4zKdlvRLlVqP05awuQ";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY,
+);
+
 // ---- Generic form submit handler ----
-// Swap the body of this function for a real API call (e.g. fetch('/api/enroll', {...}))
-// when the backend is ready. For now it validates and shows a status message.
-function handleFormSubmit(formId, statusId, successMessage) {
+// mapFn turns the raw form fields into the exact column shape each table expects.
+function handleFormSubmit(formId, statusId, successMessage, tableName, mapFn) {
   const form = document.getElementById(formId);
   const status = document.getElementById(statusId);
   if (!form) return;
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     if (!form.checkValidity()) {
@@ -90,10 +116,32 @@ function handleFormSubmit(formId, statusId, successMessage) {
       return;
     }
 
-    // TODO: replace with a real submission (fetch/AJAX to your backend or a service like Formspree)
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+
+    const payload = mapFn(new FormData(form));
+    const { error } = await supabaseClient.from(tableName).insert([payload]);
+
+    submitBtn.disabled = false;
+
+    if (error) {
+      console.error(error);
+      status.textContent =
+        "Something went wrong. Please try again or reach out to us directly.";
+      status.className = "form-status error";
+      return;
+    }
+
     status.textContent = successMessage;
     status.className = "form-status success";
     form.reset();
+
+    if (formId === "enrollmentForm") {
+      const sessionSelect = document.getElementById("sessionSelect");
+      sessionSelect.innerHTML =
+        '<option value="">Select a course first</option>';
+      sessionSelect.disabled = true;
+    }
   });
 }
 
@@ -101,10 +149,45 @@ handleFormSubmit(
   "enrollmentForm",
   "enrollStatus",
   "Thanks! Your enrollment request has been received — we'll be in touch shortly.",
+  "enrollments",
+  (fd) => {
+    const [course, level] = fd.get("courseSelect").split("-");
+    return {
+      course,
+      level,
+      session: fd.get("sessionSelect"),
+      full_name: fd.get("enrollName"),
+      email: fd.get("enrollEmail"),
+      phone: fd.get("enrollPhone"),
+    };
+  },
 );
+
 handleFormSubmit(
   "consultForm",
   "consultStatus",
   "Thanks! Your consultation request has been received — we'll confirm shortly.",
+  "consultations",
+  (fd) => ({
+    full_name: fd.get("consultName"),
+    email: fd.get("consultEmail"),
+    phone: fd.get("consultPhone"),
+    consult_date: fd.get("consultDate"),
+    coach: fd.get("consultCoach"),
+    service: fd.get("consultService"),
+    hours: Number(fd.get("consultHours")),
+    payment_method: fd.get("consultPayment"),
+  }),
 );
-handleFormSubmit("contactForm", "contactStatus", "Message sent successfully.");
+
+handleFormSubmit(
+  "contactForm",
+  "contactStatus",
+  "Message sent successfully.",
+  "contact_messages",
+  (fd) => ({
+    full_name: fd.get("contactName"),
+    email: fd.get("contactEmail"),
+    message: fd.get("contactMessage"),
+  }),
+);
