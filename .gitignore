@@ -1,0 +1,22 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/*
+!.vscode/settings.json
+
+# Dependencies (once you add npm packages)
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Env vars (for when you wire in Formspree keys, etc.)
+.env
+.env.local
+
+# Build output (if you add a bundler later)
+dist/
+build/

@@ -1,292 +1,711 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>J&M Leadership & Management Limited</title>
-<link rel="stylesheet" href="style.css">
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>J&amp;M Leadership &amp; Management Limited</title>
+    <meta
+      name="description"
+      content="Certified leadership, management, entrepreneurship and sales training, plus 1-on-1 consultancy, from J&amp;M Leadership and Management Limited."
+    />
+    <!-- google font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- css styles -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- supabase -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+      defer
+    ></script>
+    <!-- lucide icon -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/lucide@1.24.0/dist/umd/lucide.min.js"
+      defer
+    ></script>
+    <!-- javascript -->
+    <script src="js/script.js" defer></script>
+  </head>
 
-<body>
+  <body>
+    <header>
+      <nav>
+        <div class="brand_wrapper">
+          <img
+            src="/assets/images/logo.png"
+            alt="J and M Leadership logo"
+            class="imgLogo"
+          />
+          <a href="#home" class="logo">J&amp;M <span>Leadership</span></a>
+        </div>
 
-<header>
-<nav>
-<div class="logo">J&M <span>Leadership</span></div>
-<ul>
-<li><a href="#home">Home</a></li>
-<li><a href="#courses">Courses</a></li>
-<li><a href="#portal">Portal</a></li>
-<li><a href="#admin">Admin</a></li>
-<li><a href="#contact">Contact</a></li>
-</ul>
-<a href="Portal.html" class="btn btn-blue">Student Login</a>
-</nav>
-</header>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#courses">Courses</a></li>
+          <li><a href="#consult">Consultancy</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li class="nav-cta-mobile">
+            <a href="#courses" class="btn btn-gold" id="nav-cta-mobile"
+              >Enroll Now</a
+            >
+          </li>
 
-<!-- HOME -->
-<section class="hero" id="home">
-<div class="hero-box">
-<h1>Become a Certified Leader, Manager, Entrepreneur or Sales Expert</h1>
-<p>Premium e-learning and consulting platform built for ambitious professionals and future executives.</p>
-<div class="actions">
-<a href="#courses" class="btn btn-gold">Enroll Now</a>
-<a href="#consult" class="btn btn-blue">Book Consultation</a>
-</div>
-</div>
-</section>
+          <!-- <li>
+            <a href="https://instagram.com">Instagram</a>
+            <a href="https://x.com">Twitter</a>
+            <a href="https://linkedin.com">Linkedin</a>
+          </li> -->
+        </ul>
 
-<!-- ABOUT -->
-<section>
-<div class="container">
-<h2 class="title">About Us</h2>
-<div class="grid">
-<div class="card">
-<h3>World-Class Training</h3>
-<p>J&M Leadership and Management Limited delivers practical executive education and business transformation systems.</p>
-</div>
-<div class="card">
-<h3>International Partnership</h3>
-<p>In partnership with <strong>Shay Reeds Academy USA</strong> to provide globally relevant training and certifications.</p>
-</div>
-<div class="card">
-<h3>Career Advancement</h3>
-<p>We help students become respected leaders, growth-driven managers and profitable entrepreneurs.</p>
-</div>
-</div>
-</div>
-</section>
+        <a href="#courses" class="btn btn-blue nav-cta-desktop">Enroll Now</a>
 
-<!-- COURSES -->
-<section id="courses">
-<div class="container">
-<h2 class="title">Courses</h2>
+        <button
+          type="button"
+          class="nav-toggle"
+          id="navToggle"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+          aria-controls="navLinks"
+        >
+          <i data-lucide="menu" class="icon-menu"></i>
+          <i data-lucide="x" class="icon-close"></i>
+        </button>
+      </nav>
+    </header>
 
-<div class="grid">
-<div class="card">
-<h3>Leadership</h3>
-<span class="tag">Basic - 3 Months</span>
-<span class="tag">Advanced - 5 Months</span>
-</div>
+    <!-- HOME -->
+    <section class="hero" id="home">
+      <div class="hero-box">
+        <h1 id="heroHeading">
+          Become a Certified Leader, Manager, Entrepreneur or Sales Expert
+        </h1>
+        <p>
+          Premium training and consulting built for ambitious professionals and
+          future executives.
+        </p>
+        <div class="actions">
+          <a href="#courses" class="btn btn-gold">Enroll Now</a>
+          <a href="#consult" class="btn btn-blue">Book Consultation</a>
+        </div>
+      </div>
+    </section>
 
-<div class="card">
-<h3>Management</h3>
-<span class="tag">Basic - 3 Months</span>
-<span class="tag">Advanced - 5 Months</span>
-</div>
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="container">
+        <h2 class="title">About Us</h2>
 
-<div class="card">
-<h3>Entrepreneurship</h3>
-<span class="tag">Basic - 3 Months</span>
-<span class="tag">Advanced - 5 Months</span>
-</div>
+        <div class="about-layout">
+          <p class="about-lead">
+            J&amp;M Leadership and Management Limited delivers practical
+            executive education and business transformation systems &mdash;
+            built for professionals who intend to lead, not just manage.
+          </p>
 
-<div class="card">
-<h3>Sales</h3>
-<span class="tag">Basic - 3 Months</span>
-<span class="tag">Advanced - 5 Months</span>
-</div>
-</div>
-</div>
-</section>
+          <div class="about-pillars">
+            <div class="pillar">
+              <span class="pillar-mark" aria-hidden="true"></span>
+              <h3>World-Class Training</h3>
+              <p>
+                Practical executive education and business transformation
+                systems, built from real-world leadership and management
+                practice.
+              </p>
+            </div>
 
-<!-- PRICING -->
-<section>
-<div class="container">
-<h2 class="title">Pricing Plans</h2>
-<div class="grid">
-<div class="card">
-<h3>Basic Plan</h3>
-<h1>$99</h1>
-<p>One Course Access</p>
-</div>
+            <div class="pillar">
+              <span class="pillar-mark" aria-hidden="true"></span>
+              <h3>International Partnership</h3>
+              <p>
+                In partnership with <strong>Shay Reeds Academy USA</strong> to
+                provide globally relevant training and certifications.
+              </p>
+            </div>
 
-<div class="card">
-<h3>Professional</h3>
-<h1>$249</h1>
-<p>Advanced Course + Exam + Certificate</p>
-</div>
+            <div class="pillar">
+              <span class="pillar-mark" aria-hidden="true"></span>
+              <h3>Career Advancement</h3>
+              <p>
+                We help students become respected leaders, growth-driven
+                managers and profitable entrepreneurs.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<div class="card">
-<h3>Executive</h3>
-<h1>$499</h1>
-<p>All Courses + Advisor + Consulting</p>
-</div>
-</div>
-</div>
-</section>
+    <!-- COURSES / ENROLLMENT -->
+    <section id="courses">
+      <div class="container">
+        <h2 class="title">Courses</h2>
+        <p class="section-intro">
+          Choose a track and level below. No account or login is required
+          &mdash; enroll directly and our team will follow up to confirm payment
+          and start dates.
+        </p>
 
-<!-- EVENTS -->
-<section>
-<div class="container">
-<h2 class="title">Events</h2>
-<div class="grid">
-<div class="card">Symposiums</div>
-<div class="card">Seminars</div>
-<div class="card">Networking</div>
-<div class="card">Team Bonding</div>
-</div>
-</div>
-</section>
+        <div class="grid course-grid">
+          <!-- Leadership -->
+          <article class="card course-card">
+            <h3>Leadership</h3>
+            <!-- basic__leadership -->
+            <div class="tier">
+              <div class="tier-head">
+                <span class="tier-name">Basic</span>
+                <span class="tier-price">&#8358;150,000</span>
+              </div>
+              <p class="tier-schedule">
+                4 quarterly sessions &mdash; choose one at enrollment:
+              </p>
+              <ul class="session-tags">
+                <li>Summer (Jan&ndash;Mar)</li>
+                <li>Autumn (Apr&ndash;Jun)</li>
+                <li>Winter (Jul&ndash;Sep)</li>
+                <li>Spring (Oct&ndash;Dec)</li>
+              </ul>
+              <button
+                type="button"
+                class="btn btn-blue btn-enroll"
+                data-course="Leadership"
+                data-level="Basic"
+              >
+                Enroll &mdash; Basic
+              </button>
+            </div>
+            <!-- advanced__leadership -->
+            <div class="tier">
+              <div class="tier-head">
+                <span class="tier-name">Advanced</span>
+                <span class="tier-price">&#8358;250,000</span>
+              </div>
+              <p class="tier-schedule">
+                Runs twice a year &mdash; choose one at enrollment:
+              </p>
+              <ul class="session-tags">
+                <li>First Session (Jan&ndash;Jun)</li>
+                <li>Second Session (Jul&ndash;Dec)</li>
+              </ul>
+              <button
+                type="button"
+                class="btn btn-gold btn-enroll"
+                data-course="Leadership"
+                data-level="Advanced"
+              >
+                Enroll &mdash; Advanced
+              </button>
+            </div>
+          </article>
 
-<!-- CONSULTANCY -->
-<section id="consult">
-<div class="container">
-<h2 class="title">Consultancy Booking</h2>
-<div class="card">
-<div class="two">
-<div>
-<label>Select Coach</label>
-<select>
-<option>Dr. James Morgan</option>
-<option>Sarah Reed</option>
-<option>Michael Grant</option>
-</select>
-</div>
+          <!-- Management -->
+          <article class="card course-card">
+            <h3>Management</h3>
+            <!-- basic__management -->
+            <div class="tier">
+              <div class="tier-head">
+                <span class="tier-name">Basic</span>
+                <span class="tier-price">&#8358;150,000</span>
+              </div>
+              <p class="tier-schedule">
+                4 quarterly sessions &mdash; choose one at enrollment:
+              </p>
+              <ul class="session-tags">
+                <li>Summer (Jan&ndash;Mar)</li>
+                <li>Autumn (Apr&ndash;Jun)</li>
+                <li>Winter (Jul&ndash;Sep)</li>
+                <li>Spring (Oct&ndash;Dec)</li>
+              </ul>
+              <button
+                type="button"
+                class="btn btn-blue btn-enroll"
+                data-course="Management"
+                data-level="Basic"
+              >
+                Enroll &mdash; Basic
+              </button>
+            </div>
+            <!-- advanced__management -->
+            <div class="tier">
+              <div class="tier-head">
+                <span class="tier-name">Advanced</span>
+                <span class="tier-price">&#8358;250,000</span>
+              </div>
+              <p class="tier-schedule">
+                Runs twice a year &mdash; choose one at enrollment:
+              </p>
+              <ul class="session-tags">
+                <li>First Session (Jan&ndash;Jun)</li>
+                <li>Second Session (Jul&ndash;Dec)</li>
+              </ul>
+              <button
+                type="button"
+                class="btn btn-gold btn-enroll"
+                data-course="Management"
+                data-level="Advanced"
+              >
+                Enroll &mdash; Advanced
+              </button>
+            </div>
+          </article>
 
-<div>
-<label>Select Date</label>
-<input type="date">
-</div>
-</div>
+          <!-- Entrepreneurship -->
+          <article class="card course-card">
+            <h3>Entrepreneurship</h3>
+            <!-- basic__entrepreneurship -->
+            <div class="tier">
+              <div class="tier-head">
+                <span class="tier-name">Basic</span>
+                <span class="tier-price">&#8358;150,000</span>
+              </div>
+              <p class="tier-schedule">
+                4 quarterly sessions &mdash; choose one at enrollment:
+              </p>
+              <ul class="session-tags">
+                <li>Summer (Jan&ndash;Mar)</li>
+                <li>Autumn (Apr&ndash;Jun)</li>
+                <li>Winter (Jul&ndash;Sep)</li>
+                <li>Spring (Oct&ndash;Dec)</li>
+              </ul>
+              <button
+                type="button"
+                class="btn btn-blue btn-enroll"
+                data-course="Entrepreneurship"
+                data-level="Basic"
+              >
+                Enroll &mdash; Basic
+              </button>
+            </div>
+            <!-- advanced__entrepreneurship -->
+            <div class="tier">
+              <div class="tier-head">
+                <span class="tier-name">Advanced</span>
+                <span class="tier-price">&#8358;250,000</span>
+              </div>
+              <p class="tier-schedule">
+                Runs twice a year &mdash; choose one at enrollment:
+              </p>
+              <ul class="session-tags">
+                <li>First Session (Jan&ndash;Jun)</li>
+                <li>Second Session (Jul&ndash;Dec)</li>
+              </ul>
+              <button
+                type="button"
+                class="btn btn-gold btn-enroll"
+                data-course="Entrepreneurship"
+                data-level="Advanced"
+              >
+                Enroll &mdash; Advanced
+              </button>
+            </div>
+          </article>
 
-<label>Choose Service</label>
-<select>
-<option>Leadership Coaching</option>
-<option>Business Strategy</option>
-<option>Sales Performance</option>
-</select>
+          <!-- Sales -->
+          <article class="card course-card">
+            <h3>Sales</h3>
+            <!-- basic__sales -->
+            <div class="tier">
+              <div class="tier-head">
+                <span class="tier-name">Basic</span>
+                <span class="tier-price">&#8358;150,000</span>
+              </div>
+              <p class="tier-schedule">
+                4 quarterly sessions &mdash; choose one at enrollment:
+              </p>
+              <ul class="session-tags">
+                <li>Summer (Jan&ndash;Mar)</li>
+                <li>Autumn (Apr&ndash;Jun)</li>
+                <li>Winter (Jul&ndash;Sep)</li>
+                <li>Spring (Oct&ndash;Dec)</li>
+              </ul>
+              <button
+                type="button"
+                class="btn btn-blue btn-enroll"
+                data-course="Sales"
+                data-level="Basic"
+              >
+                Enroll &mdash; Basic
+              </button>
+            </div>
+            <!-- advanced__sales -->
+            <div class="tier">
+              <div class="tier-head">
+                <span class="tier-name">Advanced</span>
+                <span class="tier-price">&#8358;250,000</span>
+              </div>
+              <p class="tier-schedule">
+                Runs twice a year &mdash; choose one at enrollment:
+              </p>
+              <ul class="session-tags">
+                <li>First Session (Jan&ndash;Jun)</li>
+                <li>Second Session (Jul&ndash;Dec)</li>
+              </ul>
+              <button
+                type="button"
+                class="btn btn-gold btn-enroll"
+                data-course="Sales"
+                data-level="Advanced"
+              >
+                Enroll &mdash; Advanced
+              </button>
+            </div>
+          </article>
+        </div>
 
-<label>Payment</label>
-<select>
-<option>Card Payment</option>
-<option>Bank Transfer</option>
-<option>Paystack / Flutterwave</option>
-</select>
+        <!-- Enrollment form -->
+        <div class="card enroll-form" id="enroll-form">
+          <h3>Enroll in a Course</h3>
+          <p class="small">
+            Pick your track and level, add your details, and we'll reach out to
+            confirm your spot and payment.
+          </p>
 
-<br><br>
-<button class="btn btn-blue" onclick="alert('Consultation booked successfully')">Book Appointment</button>
-</div>
-</div>
-</section>
+          <form id="enrollmentForm" novalidate>
+            <label for="courseSelect">Course &amp; Level</label>
+            <select id="courseSelect" name="courseSelect" required>
+              <option value="">Select a course</option>
+              <option value="Leadership-Basic">
+                Leadership &ndash; Basic (&#8358;150,000)
+              </option>
+              <option value="Leadership-Advanced">
+                Leadership &ndash; Advanced (&#8358;250,000)
+              </option>
+              <option value="Management-Basic">
+                Management &ndash; Basic (&#8358;150,000)
+              </option>
+              <option value="Management-Advanced">
+                Management &ndash; Advanced (&#8358;250,000)
+              </option>
+              <option value="Entrepreneurship-Basic">
+                Entrepreneurship &ndash; Basic (&#8358;150,000)
+              </option>
+              <option value="Entrepreneurship-Advanced">
+                Entrepreneurship &ndash; Advanced (&#8358;250,000)
+              </option>
+              <option value="Sales-Basic">
+                Sales &ndash; Basic (&#8358;150,000)
+              </option>
+              <option value="Sales-Advanced">
+                Sales &ndash; Advanced (&#8358;250,000)
+              </option>
+            </select>
 
-<!-- TESTIMONIALS -->
-<section>
-<div class="container">
-<h2 class="title">Testimonials</h2>
-<div class="grid">
-<div class="card">"Premium leadership training experience." – Grace A.</div>
-<div class="card">"My business revenue improved after consulting." – Daniel O.</div>
-<div class="card">"Excellent student portal and support." – Esther K.</div>
-</div>
-</div>
-</section>
+            <label for="sessionSelect">Session</label>
+            <select id="sessionSelect" name="sessionSelect" required disabled>
+              <option value="">Select a course first</option>
+            </select>
 
+            <div class="two">
+              <div>
+                <label for="enrollName">Full Name</label>
+                <input
+                  type="text"
+                  id="enrollName"
+                  name="enrollName"
+                  autocomplete="name"
+                  required
+                />
+              </div>
+              <div>
+                <label for="enrollEmail">Email</label>
+                <input
+                  type="email"
+                  id="enrollEmail"
+                  name="enrollEmail"
+                  autocomplete="email"
+                  required
+                />
+              </div>
+            </div>
 
-<!-- Dashboard -->
-<div class="topstats">
-<div class="stat">
-<h4>My Courses</h4>
-<p>2 Active Courses</p>
-</div>
+            <label for="enrollPhone">Phone Number</label>
+            <input
+              type="tel"
+              id="enrollPhone"
+              name="enrollPhone"
+              autocomplete="tel"
+              required
+            />
 
-<div class="stat">
-<h4>Course Progress</h4>
-<div class="progress"><span></span></div>
-<p class="small">68% Completed</p>
-</div>
+            <br /><br />
+            <button type="submit" class="btn btn-gold">
+              Submit Enrollment
+            </button>
+            <p
+              class="form-status"
+              id="enrollStatus"
+              role="status"
+              aria-live="polite"
+            ></p>
+          </form>
+        </div>
+      </div>
+    </section>
 
-<div class="stat">
-<h4>Access Timer</h4>
-<p id="timerText">Basic Plan: 90 Days Remaining</p>
-<button class="btn btn-gold" style="margin-top:10px;" onclick="alert('Redirecting to payment...')">Reopen Payment</button>
-</div>
-</div>
+    <!-- EVENTS -->
+    <section id="events">
+      <div class="container">
+        <h2 class="title">Events</h2>
+        <p class="section-intro">
+          Beyond the classroom &mdash; ways we bring our community together to
+          learn, connect and grow.
+        </p>
 
-<!-- Modules -->
-<div class="player">
-<h3>Course Module</h3>
-<div class="fake-video">▶ Video Lesson Player</div>
+        <div class="events-grid">
+          <article class="event-card" style="--accent: #0b2d74">
+            <div class="event-card-head">
+              <span class="event-card-icon" aria-hidden="true">
+                <i data-lucide="mic"></i>
+              </span>
+              <h3>Symposiums</h3>
+            </div>
+            <p>
+              Multi-day gatherings with keynote speakers and panel discussions
+              on leadership and strategy.
+            </p>
+            <span class="event-card-bar" aria-hidden="true"></span>
+          </article>
 
-<audio controls style="width:100%;">
-<source src="">
-</audio>
+          <article class="event-card" style="--accent: #3457a6">
+            <div class="event-card-head">
+              <span class="event-card-icon" aria-hidden="true">
+                <i data-lucide="presentation"></i>
+              </span>
+              <h3>Seminars</h3>
+            </div>
+            <p>
+              Focused sessions that go deep on a single management or sales
+              topic in one sitting.
+            </p>
+            <span class="event-card-bar" aria-hidden="true"></span>
+          </article>
 
-<div class="file">📄 Download PDF Lecture Notes</div>
-<div class="file">📝 Assignment: Submit leadership case study</div>
-<div class="file">❓ Quiz: 20 Questions Available</div>
-</div>
+          <article class="event-card" style="--accent: #d4af37">
+            <div class="event-card-head">
+              <span class="event-card-icon" aria-hidden="true">
+                <i data-lucide="users"></i>
+              </span>
+              <h3>Networking</h3>
+            </div>
+            <p>
+              Structured mixers connecting you with peers, mentors and potential
+              clients.
+            </p>
+            <span class="event-card-bar" aria-hidden="true"></span>
+          </article>
 
-<!-- Final Exam -->
-<div class="card">
-<h3>Final Exam</h3>
-<p>Attempt your final certification assessment.</p>
-<br>
-<button class="btn btn-blue" onclick="alert('Exam Started')">Start Exam</button>
-</div>
+          <article class="event-card" style="--accent: #8c6a1f">
+            <div class="event-card-head">
+              <span class="event-card-icon" aria-hidden="true">
+                <i data-lucide="handshake"></i>
+              </span>
+              <h3>Team Bonding</h3>
+            </div>
+            <p>
+              Offsite experiences designed to strengthen collaboration and trust
+              within teams.
+            </p>
+            <span class="event-card-bar" aria-hidden="true"></span>
+          </article>
+        </div>
+      </div>
+    </section>
 
-<!-- Certificate -->
-<div class="card">
-<h3>Download E-Certificate</h3>
-<p>Available after successful completion.</p>
-<br>
-<button class="btn btn-gold" onclick="alert('Certificate Downloaded')">Download Certificate</button>
-</div>
+    <!-- CONSULTANCY -->
+    <section id="consult">
+      <div class="container">
+        <h2 class="title">Consultancy Booking</h2>
+        <p class="section-intro">
+          1-on-1 and team consulting sessions, billed hourly.
+          <span class="rate-badge">&#8358;50,000 / hour</span>
+        </p>
 
-<!-- Chat -->
-<div class="chat">
-<h3>Assigned Advisor Chat</h3>
-<div class="msg">Advisor: Welcome. How can I help?</div>
-<div class="msg me">Student: Need help with module 2.</div>
-<input type="text" placeholder="Type message...">
-</div>
+        <div class="card">
+          <form id="consultForm" novalidate>
+            <div class="two">
+              <div>
+                <label for="consultName">Full Name</label>
+                <input
+                  type="text"
+                  id="consultName"
+                  name="consultName"
+                  autocomplete="name"
+                  required
+                />
+              </div>
+              <div>
+                <label for="consultEmail">Email</label>
+                <input
+                  type="email"
+                  id="consultEmail"
+                  name="consultEmail"
+                  autocomplete="email"
+                  required
+                />
+              </div>
+            </div>
 
-</div>
-</div>
-</div>
-</section>
+            <div class="two">
+              <div>
+                <label for="consultPhone">Phone Number</label>
+                <input
+                  type="tel"
+                  id="consultPhone"
+                  name="consultPhone"
+                  autocomplete="tel"
+                  required
+                />
+              </div>
+              <div>
+                <label for="consultDate">Select Date</label>
+                <input
+                  type="date"
+                  id="consultDate"
+                  name="consultDate"
+                  required
+                />
+              </div>
+            </div>
 
+            <!-- <label for="consultCoach">Select Coach</label>
+            <select id="consultCoach" name="consultCoach" required>
+              <option>Dr. James Morgan</option>
+              <option>Sarah Reed</option>
+              <option>Michael Grant</option>
+            </select> -->
 
+            <label for="consultService">Choose Service</label>
+            <select id="consultService" name="consultService" required>
+              <option>Leadership Coaching</option>
+              <option>Business Strategy</option>
+              <option>Sales Performance</option>
+            </select>
 
-<!-- CONTACT -->
-<section id="contact">
-<div class="container">
-<h2 class="title">Contact Us</h2>
+            <label for="consultHours">Estimated Hours</label>
+            <select id="consultHours" name="consultHours" required>
+              <option value="1">1 hour &mdash; &#8358;50,000</option>
+              <option value="2">2 hours &mdash; &#8358;100,000</option>
+              <option value="3">3 hours &mdash; &#8358;150,000</option>
+              <option value="4">4 hours &mdash; &#8358;200,000</option>
+            </select>
 
-<div class="card">
-<label>Full Name</label>
-<input type="text">
+            <label for="consultPayment">Payment</label>
+            <select id="consultPayment" name="consultPayment" required>
+              <option disabled aria-disabled="true">Card Payment - soon</option>
+              <option>Bank Transfer</option>
+              <option disabled aria-disabled="true">
+                Paystack / Flutterwave - soon
+              </option>
+            </select>
 
-<label>Email</label>
-<input type="email">
+            <br /><br />
+            <button type="submit" class="btn btn-blue">Book Appointment</button>
+            <p
+              class="form-status"
+              id="consultStatus"
+              role="status"
+              aria-live="polite"
+            ></p>
+          </form>
+        </div>
+      </div>
+    </section>
 
-<label>Message</label>
-<textarea rows="5"></textarea>
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+      <div class="container">
+        <h2 class="title">Testimonials</h2>
+        <p class="section-intro">
+          Real feedback from professionals who've completed our programs.
+        </p>
 
-<br><br>
-<button class="btn btn-blue" onclick="alert('Message Sent Successfully')">Send Message</button>
-</div>
-</div>
-</section>
+        <div class="testimonials-grid">
+          <article class="testimonial-card" style="--accent: #0b2d74">
+            <span class="testimonial-quote-icon" aria-hidden="true">
+              <i data-lucide="quote"></i>
+            </span>
+            <p class="testimonial-text">
+              Premium leadership training experience.
+            </p>
+            <p class="testimonial-author">Grace A.</p>
+            <span class="testimonial-bar" aria-hidden="true"></span>
+          </article>
 
-<footer>
-© 2026 J&M Leadership and Management Limited. All Rights Reserved.
-</footer>
+          <article class="testimonial-card" style="--accent: #d4af37">
+            <span class="testimonial-quote-icon" aria-hidden="true">
+              <i data-lucide="quote"></i>
+            </span>
+            <p class="testimonial-text">
+              My business revenue improved after consulting.
+            </p>
+            <p class="testimonial-author">Daniel O.</p>
+            <span class="testimonial-bar" aria-hidden="true"></span>
+          </article>
 
-<script>
-function generateStudent(){
-let name = document.getElementById("fullname").value;
-if(name===""){
-alert("Enter full name");
-return;
-}
-let username = name.toLowerCase().replace(/\s/g,'') + Math.floor(Math.random()*100);
-let id = "JML" + Math.floor(10000 + Math.random()*90000);
+          <article class="testimonial-card" style="--accent: #3457a6">
+            <span class="testimonial-quote-icon" aria-hidden="true">
+              <i data-lucide="quote"></i>
+            </span>
+            <p class="testimonial-text">Excellent training and support.</p>
+            <p class="testimonial-author">Esther K.</p>
+            <span class="testimonial-bar" aria-hidden="true"></span>
+          </article>
+        </div>
+      </div>
+    </section>
 
-document.getElementById("studentInfo").innerHTML =
-"Registered Successfully! Username: <strong>"+username+
-"</strong> | Student ID: <strong>"+id+"</strong>";
-}
-</script>
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="container">
+        <h2 class="title">Contact Us</h2>
 
-</body>
+        <div class="card">
+          <form id="contactForm" novalidate>
+            <label for="contactName">Full Name</label>
+            <input
+              type="text"
+              id="contactName"
+              name="contactName"
+              autocomplete="name"
+              required
+            />
+
+            <label for="contactEmail">Email</label>
+            <input
+              type="email"
+              id="contactEmail"
+              name="contactEmail"
+              autocomplete="email"
+              required
+            />
+
+            <label for="contactMessage">Message</label>
+            <textarea
+              id="contactMessage"
+              name="contactMessage"
+              rows="5"
+              required
+            ></textarea>
+
+            <br /><br />
+            <button type="submit" class="btn btn-blue">Send Message</button>
+            <p
+              class="form-status"
+              id="contactStatus"
+              role="status"
+              aria-live="polite"
+            ></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      &copy; 2026 J&amp;M Leadership and Management Limited. All Rights
+      Reserved.
+    </footer>
+  </body>
 </html>
