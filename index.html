@@ -8,9 +8,6 @@
       name="description"
       content="Certified leadership, management, entrepreneurship and sales training, plus 1-on-1 consultancy, from J&amp;M Leadership and Management Limited."
     />
-    <!-- css styles -->
-    <link rel="stylesheet" href="css/style.css" />
-
     <!-- google font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,26 +15,72 @@
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
     />
+    <!-- css styles -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- supabase -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+      defer
+    ></script>
+    <!-- lucide icon -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/lucide@1.24.0/dist/umd/lucide.min.js"
+      defer
+    ></script>
+    <!-- javascript -->
+    <script src="js/script.js" defer></script>
   </head>
 
   <body>
     <header>
       <nav>
-        <div class="logo">J&amp;M <span>Leadership</span></div>
-        <ul>
+        <div class="brand_wrapper">
+          <img
+            src="/assets/images/logo.png"
+            alt="J and M Leadership logo"
+            class="imgLogo"
+          />
+          <a href="#home" class="logo">J&amp;M <span>Leadership</span></a>
+        </div>
+
+        <ul class="nav-links" id="navLinks">
           <li><a href="#home">Home</a></li>
           <li><a href="#courses">Courses</a></li>
           <li><a href="#consult">Consultancy</a></li>
           <li><a href="#contact">Contact</a></li>
+          <li class="nav-cta-mobile">
+            <a href="#courses" class="btn btn-gold" id="nav-cta-mobile"
+              >Enroll Now</a
+            >
+          </li>
+
+          <!-- <li>
+            <a href="https://instagram.com">Instagram</a>
+            <a href="https://x.com">Twitter</a>
+            <a href="https://linkedin.com">Linkedin</a>
+          </li> -->
         </ul>
-        <a href="#courses" class="btn btn-blue">Enroll Now</a>
+
+        <a href="#courses" class="btn btn-blue nav-cta-desktop">Enroll Now</a>
+
+        <button
+          type="button"
+          class="nav-toggle"
+          id="navToggle"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+          aria-controls="navLinks"
+        >
+          <i data-lucide="menu" class="icon-menu"></i>
+          <i data-lucide="x" class="icon-close"></i>
+        </button>
       </nav>
     </header>
 
     <!-- HOME -->
     <section class="hero" id="home">
       <div class="hero-box">
-        <h1>
+        <h1 id="heroHeading">
           Become a Certified Leader, Manager, Entrepreneur or Sales Expert
         </h1>
         <p>
@@ -107,8 +150,10 @@
         </p>
 
         <div class="grid course-grid">
+          <!-- Leadership -->
           <article class="card course-card">
             <h3>Leadership</h3>
+            <!-- basic__leadership -->
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Basic</span>
@@ -132,6 +177,7 @@
                 Enroll &mdash; Basic
               </button>
             </div>
+            <!-- advanced__leadership -->
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Advanced</span>
@@ -155,8 +201,10 @@
             </div>
           </article>
 
+          <!-- Management -->
           <article class="card course-card">
             <h3>Management</h3>
+            <!-- basic__management -->
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Basic</span>
@@ -180,6 +228,7 @@
                 Enroll &mdash; Basic
               </button>
             </div>
+            <!-- advanced__management -->
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Advanced</span>
@@ -203,8 +252,10 @@
             </div>
           </article>
 
+          <!-- Entrepreneurship -->
           <article class="card course-card">
             <h3>Entrepreneurship</h3>
+            <!-- basic__entrepreneurship -->
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Basic</span>
@@ -228,6 +279,7 @@
                 Enroll &mdash; Basic
               </button>
             </div>
+            <!-- advanced__entrepreneurship -->
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Advanced</span>
@@ -251,8 +303,10 @@
             </div>
           </article>
 
+          <!-- Sales -->
           <article class="card course-card">
             <h3>Sales</h3>
+            <!-- basic__sales -->
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Basic</span>
@@ -276,6 +330,7 @@
                 Enroll &mdash; Basic
               </button>
             </div>
+            <!-- advanced__sales -->
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Advanced</span>
@@ -394,11 +449,67 @@
     <section id="events">
       <div class="container">
         <h2 class="title">Events</h2>
-        <div class="grid">
-          <div class="card">Symposiums</div>
-          <div class="card">Seminars</div>
-          <div class="card">Networking</div>
-          <div class="card">Team Bonding</div>
+        <p class="section-intro">
+          Beyond the classroom &mdash; ways we bring our community together to
+          learn, connect and grow.
+        </p>
+
+        <div class="events-grid">
+          <article class="event-card" style="--accent: #0b2d74">
+            <div class="event-card-head">
+              <span class="event-card-icon" aria-hidden="true">
+                <i data-lucide="mic"></i>
+              </span>
+              <h3>Symposiums</h3>
+            </div>
+            <p>
+              Multi-day gatherings with keynote speakers and panel discussions
+              on leadership and strategy.
+            </p>
+            <span class="event-card-bar" aria-hidden="true"></span>
+          </article>
+
+          <article class="event-card" style="--accent: #3457a6">
+            <div class="event-card-head">
+              <span class="event-card-icon" aria-hidden="true">
+                <i data-lucide="presentation"></i>
+              </span>
+              <h3>Seminars</h3>
+            </div>
+            <p>
+              Focused sessions that go deep on a single management or sales
+              topic in one sitting.
+            </p>
+            <span class="event-card-bar" aria-hidden="true"></span>
+          </article>
+
+          <article class="event-card" style="--accent: #d4af37">
+            <div class="event-card-head">
+              <span class="event-card-icon" aria-hidden="true">
+                <i data-lucide="users"></i>
+              </span>
+              <h3>Networking</h3>
+            </div>
+            <p>
+              Structured mixers connecting you with peers, mentors and potential
+              clients.
+            </p>
+            <span class="event-card-bar" aria-hidden="true"></span>
+          </article>
+
+          <article class="event-card" style="--accent: #8c6a1f">
+            <div class="event-card-head">
+              <span class="event-card-icon" aria-hidden="true">
+                <i data-lucide="handshake"></i>
+              </span>
+              <h3>Team Bonding</h3>
+            </div>
+            <p>
+              Offsite experiences designed to strengthen collaboration and trust
+              within teams.
+            </p>
+            <span class="event-card-bar" aria-hidden="true"></span>
+          </article>
         </div>
       </div>
     </section>
@@ -459,12 +570,12 @@
               </div>
             </div>
 
-            <label for="consultCoach">Select Coach</label>
+            <!-- <label for="consultCoach">Select Coach</label>
             <select id="consultCoach" name="consultCoach" required>
               <option>Dr. James Morgan</option>
               <option>Sarah Reed</option>
               <option>Michael Grant</option>
-            </select>
+            </select> -->
 
             <label for="consultService">Choose Service</label>
             <select id="consultService" name="consultService" required>
@@ -483,9 +594,11 @@
 
             <label for="consultPayment">Payment</label>
             <select id="consultPayment" name="consultPayment" required>
-              <option>Card Payment</option>
+              <option disabled aria-disabled="true">Card Payment - soon</option>
               <option>Bank Transfer</option>
-              <option>Paystack / Flutterwave</option>
+              <option disabled aria-disabled="true">
+                Paystack / Flutterwave - soon
+              </option>
             </select>
 
             <br /><br />
@@ -505,18 +618,41 @@
     <section id="testimonials">
       <div class="container">
         <h2 class="title">Testimonials</h2>
-        <div class="grid">
-          <div class="card">
-            &ldquo;Premium leadership training experience.&rdquo; &ndash; Grace
-            A.
-          </div>
-          <div class="card">
-            &ldquo;My business revenue improved after consulting.&rdquo; &ndash;
-            Daniel O.
-          </div>
-          <div class="card">
-            &ldquo;Excellent training and support.&rdquo; &ndash; Esther K.
-          </div>
+        <p class="section-intro">
+          Real feedback from professionals who've completed our programs.
+        </p>
+
+        <div class="testimonials-grid">
+          <article class="testimonial-card" style="--accent: #0b2d74">
+            <span class="testimonial-quote-icon" aria-hidden="true">
+              <i data-lucide="quote"></i>
+            </span>
+            <p class="testimonial-text">
+              Premium leadership training experience.
+            </p>
+            <p class="testimonial-author">Grace A.</p>
+            <span class="testimonial-bar" aria-hidden="true"></span>
+          </article>
+
+          <article class="testimonial-card" style="--accent: #d4af37">
+            <span class="testimonial-quote-icon" aria-hidden="true">
+              <i data-lucide="quote"></i>
+            </span>
+            <p class="testimonial-text">
+              My business revenue improved after consulting.
+            </p>
+            <p class="testimonial-author">Daniel O.</p>
+            <span class="testimonial-bar" aria-hidden="true"></span>
+          </article>
+
+          <article class="testimonial-card" style="--accent: #3457a6">
+            <span class="testimonial-quote-icon" aria-hidden="true">
+              <i data-lucide="quote"></i>
+            </span>
+            <p class="testimonial-text">Excellent training and support.</p>
+            <p class="testimonial-author">Esther K.</p>
+            <span class="testimonial-bar" aria-hidden="true"></span>
+          </article>
         </div>
       </div>
     </section>
@@ -571,7 +707,5 @@
       &copy; 2026 J&amp;M Leadership and Management Limited. All Rights
       Reserved.
     </footer>
-
-    <script src="js/script.js"></script>
   </body>
 </html>
