@@ -193,3 +193,30 @@ handleFormSubmit(
     message: fd.get("contactMessage"),
   }),
 );
+
+const heroStatements = [
+  "Become a Certified Leader, Manager, Entrepreneur or Sales Expert",
+  "In partnership with MYLIFE2LIVE academy to provide globally relevant training and certifications.",
+];
+
+let heroIndex = 0;
+const heroHeading = document.getElementById("heroHeading");
+
+function rotateHeroText() {
+  heroHeading.classList.add("fade-out");
+
+  setTimeout(() => {
+    heroIndex = (heroIndex + 1) % heroStatements.length;
+    heroHeading.textContent = heroStatements[heroIndex];
+
+    // Force the browser to acknowledge the new state
+    // before we remove the class, so the transition actually fires
+    void heroHeading.offsetWidth; // forces reflow
+
+    requestAnimationFrame(() => {
+      heroHeading.classList.remove("fade-out");
+    });
+  }, 600);
+}
+
+setInterval(rotateHeroText, 4000);
