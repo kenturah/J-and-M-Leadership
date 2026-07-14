@@ -563,12 +563,12 @@
               </div>
             </div>
 
-            <label for="consultCoach">Select Coach</label>
+            <!-- <label for="consultCoach">Select Coach</label>
             <select id="consultCoach" name="consultCoach" required>
               <option>Dr. James Morgan</option>
               <option>Sarah Reed</option>
               <option>Michael Grant</option>
-            </select>
+            </select> -->
 
             <label for="consultService">Choose Service</label>
             <select id="consultService" name="consultService" required>
@@ -587,9 +587,11 @@
 
             <label for="consultPayment">Payment</label>
             <select id="consultPayment" name="consultPayment" required>
-              <option>Card Payment</option>
+              <option disabled aria-disabled="true">Card Payment - soon</option>
               <option>Bank Transfer</option>
-              <option>Paystack / Flutterwave</option>
+              <option disabled aria-disabled="true">
+                Paystack / Flutterwave - soon
+              </option>
             </select>
 
             <br /><br />
@@ -609,18 +611,41 @@
     <section id="testimonials">
       <div class="container">
         <h2 class="title">Testimonials</h2>
-        <div class="grid">
-          <div class="card">
-            &ldquo;Premium leadership training experience.&rdquo; &ndash; Grace
-            A.
-          </div>
-          <div class="card">
-            &ldquo;My business revenue improved after consulting.&rdquo; &ndash;
-            Daniel O.
-          </div>
-          <div class="card">
-            &ldquo;Excellent training and support.&rdquo; &ndash; Esther K.
-          </div>
+        <p class="section-intro">
+          Real feedback from professionals who've completed our programs.
+        </p>
+
+        <div class="testimonials-grid">
+          <article class="testimonial-card" style="--accent: #0b2d74">
+            <span class="testimonial-quote-icon" aria-hidden="true">
+              <i data-lucide="quote"></i>
+            </span>
+            <p class="testimonial-text">
+              Premium leadership training experience.
+            </p>
+            <p class="testimonial-author">Grace A.</p>
+            <span class="testimonial-bar" aria-hidden="true"></span>
+          </article>
+
+          <article class="testimonial-card" style="--accent: #d4af37">
+            <span class="testimonial-quote-icon" aria-hidden="true">
+              <i data-lucide="quote"></i>
+            </span>
+            <p class="testimonial-text">
+              My business revenue improved after consulting.
+            </p>
+            <p class="testimonial-author">Daniel O.</p>
+            <span class="testimonial-bar" aria-hidden="true"></span>
+          </article>
+
+          <article class="testimonial-card" style="--accent: #3457a6">
+            <span class="testimonial-quote-icon" aria-hidden="true">
+              <i data-lucide="quote"></i>
+            </span>
+            <p class="testimonial-text">Excellent training and support.</p>
+            <p class="testimonial-author">Esther K.</p>
+            <span class="testimonial-bar" aria-hidden="true"></span>
+          </article>
         </div>
       </div>
     </section>

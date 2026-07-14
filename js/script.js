@@ -110,6 +110,7 @@ function handleFormSubmit(formId, statusId, successMessage, tableName, mapFn) {
     e.preventDefault();
 
     if (!form.checkValidity()) {
+      form.classList.add("was-validated");
       form.reportValidity();
       status.textContent = "Please fill in all required fields correctly.";
       status.className = "form-status error";
@@ -135,6 +136,7 @@ function handleFormSubmit(formId, statusId, successMessage, tableName, mapFn) {
     status.textContent = successMessage;
     status.className = "form-status success";
     form.reset();
+    form.classList.remove("was-validated");
 
     if (formId === "enrollmentForm") {
       const sessionSelect = document.getElementById("sessionSelect");
