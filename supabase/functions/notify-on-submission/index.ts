@@ -10,7 +10,7 @@
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY")!;
 const BUSINESS_OWNER_EMAIL = Deno.env.get("BUSINESS_OWNER_EMAIL")!;
 const FROM_EMAIL =
-  Deno.env.get("FROM_EMAIL") ?? "J&M Leadership <onboarding@resend.dev>";
+  Deno.env.get("FROM_EMAIL") ?? "J&M Leadership <hello@jandmcompanylimited.com>";
 const WEBHOOK_SECRET = Deno.env.get("WEBHOOK_SECRET")!;
 
 async function sendEmail(to: string, subject: string, html: string) {
