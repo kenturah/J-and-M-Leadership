@@ -196,7 +196,7 @@ handleFormSubmit(
 
 const heroStatements = [
   "Become a Certified Leader, Manager, Entrepreneur or Sales Expert",
-  "In partnership with MYLIFE2LIVE academy to provide globally relevant training and certifications.",
+  "In partnership with MYLIFE2LIVE academy, USA to provide globally relevant training and certifications.",
 ];
 
 let heroIndex = 0;
