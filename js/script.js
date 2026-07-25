@@ -219,7 +219,7 @@ handleFormSubmit(
 const heroStatements = [
   "Become a Certified Leader, Manager, Entrepreneur or Sales Expert",
   "In partnership with MYLIFE2LIVE academy, USA to provide globally relevant training and certifications.",
-  "In strategic collaboration with leading international academies and corporate partners to drive executive growth."
+  "We offer high-impact corporate training and strategic workforce development designed to empower leaders and elevate team performance."
 ];
 
 let heroIndex = 0;
