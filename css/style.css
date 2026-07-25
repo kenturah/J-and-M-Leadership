@@ -307,6 +307,17 @@ nav a {
   transform: translateY(6px);
 } */
 
+#heroHeading {
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  min-height: 2.8em; /* Keeps layout height consistent when text changes length */
+  display: block;
+}
+
+#heroHeading.fade-out {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
 .hero-box {
   max-width: 850px;
   animation: fadeUp 1s ease;

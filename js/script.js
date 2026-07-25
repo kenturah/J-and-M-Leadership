@@ -100,6 +100,7 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_ANON_KEY,
 );
 
+
 // ---- Generic form submit handler ----
 // mapFn turns the raw form fields into the exact column shape each table expects.
 function handleFormSubmit(formId, statusId, successMessage, tableName, mapFn) {
@@ -115,6 +116,13 @@ function handleFormSubmit(formId, statusId, successMessage, tableName, mapFn) {
       form.reportValidity();
       status.textContent = "Please fill in all required fields correctly.";
       status.className = "form-status error";
+
+      // Clear validation error message after 4 seconds
+      setTimeout(() => {
+        status.textContent = "";
+        status.className = "form-status";
+      }, 4000);
+
       return;
     }
 
@@ -131,6 +139,13 @@ function handleFormSubmit(formId, statusId, successMessage, tableName, mapFn) {
       status.textContent =
         "Something went wrong. Please try again or reach out to us directly.";
       status.className = "form-status error";
+
+      // Clear server error message after 4 seconds
+      setTimeout(() => {
+        status.textContent = "";
+        status.className = "form-status";
+      }, 4000);
+
       return;
     }
 
@@ -145,6 +160,12 @@ function handleFormSubmit(formId, statusId, successMessage, tableName, mapFn) {
         '<option value="">Select a course first</option>';
       sessionSelect.disabled = true;
     }
+
+    // Clear success message after 4 seconds
+    setTimeout(() => {
+      status.textContent = "";
+      status.className = "form-status";
+    }, 4000);
   });
 }
 
@@ -194,24 +215,29 @@ handleFormSubmit(
   }),
 );
 
+// ---- Hero Section Text Slider ----
 const heroStatements = [
   "Become a Certified Leader, Manager, Entrepreneur or Sales Expert",
   "In partnership with MYLIFE2LIVE academy, USA to provide globally relevant training and certifications.",
+  "In strategic collaboration with leading international academies and corporate partners to drive executive growth."
 ];
 
 let heroIndex = 0;
 const heroHeading = document.getElementById("heroHeading");
 
 function rotateHeroText() {
+  if (!heroHeading) return;
+
   heroHeading.classList.add("fade-out");
 
   setTimeout(() => {
     heroIndex = (heroIndex + 1) % heroStatements.length;
     heroHeading.textContent = heroStatements[heroIndex];
 
+    // Force browser reflow to trigger transition smooth re-entry
     // Force the browser to acknowledge the new state
     // before we remove the class, so the transition actually fires
-    void heroHeading.offsetWidth; // forces reflow
+    void heroHeading.offsetWidth;  // forces reflow
 
     requestAnimationFrame(() => {
       heroHeading.classList.remove("fade-out");
@@ -219,4 +245,5 @@ function rotateHeroText() {
   }, 600);
 }
 
-setInterval(rotateHeroText, 4000);
+setInterval(rotateHeroText, 6000);
+
