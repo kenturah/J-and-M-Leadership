@@ -773,4 +773,12 @@ option:disabled {
   background: #e5e7eb !important;
   color: #9ca3af !important;
   cursor: not-allowed;
+  cursor: not-allowed !important;
+  pointer-events: none; /* Disables all mouse interactions/clicks */
+  user-select: none;   /* Prevents highlighting text */
+}
+
+/* Ensure the caution cursor still shows over the tag container */
+.session-tags li.tag-disabled {
+  pointer-events: auto; /* Re-enables cursor feedback */
 }

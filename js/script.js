@@ -97,6 +97,15 @@ document.getElementById("courseSelect")?.addEventListener("change", (e) => {
   populateSessions(level);
 });
 
+// Prevent selecting disabled options manually
+document.getElementById("sessionSelect")?.addEventListener("change", (e) => {
+  const selectedOption = e.target.options[e.target.selectedIndex];
+  if (selectedOption && selectedOption.disabled) {
+    e.target.value = ""; // Reset to default "Select a session"
+    alert("This session is currently closed for enrollment.");
+  }
+});
+
 // ----- supabase setup -----
 const SUPABASE_URL = "https://vrpituvomsaovwumjkgp.supabase.co";
 const SUPABASE_ANON_KEY =
