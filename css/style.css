@@ -739,3 +739,31 @@ footer {
     transform: translateY(0);
   }
 }
+
+
+/* Disabled tiers and buttons */
+.btn-disabled,
+button:disabled {
+  background: #d1d5db !important;
+  color: #6b7280 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Disabled option dropdown items */
+option:disabled {
+  color: #9ca3af;
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+/* Container styling for paused tiers */
+.tier-disabled {
+  opacity: 0.65;
+  pointer-events: none; /* Prevents interaction */
+}
+
+.tier-disabled button {
+  pointer-events: auto; /* Ensures the not-allowed cursor displays on hover */
+}

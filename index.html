@@ -156,11 +156,12 @@
       <div class="container">
         <h2 class="title">Courses</h2>
         <p class="section-intro">
+          All tracks are conducted via <strong>live online classes</strong>.
           Choose a track and level below. No account or login is required
           &mdash; enroll directly and our team will follow up to confirm payment
           and start dates.
         </p>
-
+        
         <div class="grid course-grid">
           <!-- Leadership -->
           <article class="card course-card">
@@ -189,7 +190,7 @@
                 Enroll &mdash; Basic
               </button>
             </div>
-            <!-- advanced__leadership -->
+            <!-- advanced__leadership
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Advanced</span>
@@ -209,6 +210,26 @@
                 data-level="Advanced"
               >
                 Enroll &mdash; Advanced
+              </button>
+            </div> -->
+
+            <!-- Example for Advanced Tier inside course cards -->
+            <div class="tier tier-disabled">
+              <div class="tier-head">
+                <span class="tier-name">Advanced (6-Month Program)</span>
+                <span class="tier-price">&#8358;250,000</span>
+              </div>
+              <p class="tier-schedule">
+                Runs twice a year &mdash; <em>Currently Closed for Enrollment</em>
+              </p>
+              <button
+                type="button"
+                class="btn btn-gold btn-enroll btn-disabled"
+                data-course="Leadership"
+                data-level="Advanced"
+                disabled
+              >
+                Enrollment Paused &mdash; Advanced
               </button>
             </div>
           </article>
@@ -382,8 +403,10 @@
               <option value="Leadership-Basic">
                 Leadership &ndash; Basic (&#8358;150,000)
               </option>
-              <option value="Leadership-Advanced">
-                Leadership &ndash; Advanced (&#8358;250,000)
+              <!-- <option value="Leadership-Advanced">
+                Leadership &ndash; Advanced (&#8358;250,000) -->
+              <option value="Leadership-Advanced" disabled>
+                Leadership &ndash; Advanced (6 Months) &mdash; Currently Unavailable
               </option>
               <option value="Management-Basic">
                 Management &ndash; Basic (&#8358;150,000)

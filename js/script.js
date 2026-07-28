@@ -50,6 +50,13 @@ function populateSessions(level) {
   const sessionSelect = document.getElementById("sessionSelect");
   if (!sessionSelect) return;
 
+  // Block Advanced selection safely
+  if (level === "Advanced") {
+    sessionSelect.innerHTML = '<option value="">Advanced level is currently paused</option>';
+    sessionSelect.disabled = true;
+    return;
+  }
+
   const options = SESSIONS_BY_LEVEL[level];
   if (!options) {
     sessionSelect.innerHTML = '<option value="">Select a course first</option>';
