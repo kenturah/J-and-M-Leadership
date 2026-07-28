@@ -35,14 +35,14 @@ window.addEventListener("resize", () => {
 // ---- Session options per level. Edit dates here once confirmed — everything else updates automatically. ----
 const SESSIONS_BY_LEVEL = {
   Basic: [
-    { value: "Summer", label: "Summer (Jan – Mar)" },
-    { value: "Autumn", label: "Autumn (Apr – Jun)" },
-    { value: "Winter", label: "Winter (Jul – Sep)" },
-    { value: "Spring", label: "Spring (Oct – Dec)" },
+    { value: "Summer", label: "Summer (Jan – Mar) — Closed", disabled: true },
+    { value: "Autumn", label: "Autumn (Apr – Jun) — Closed", disabled: true },
+    { value: "Winter", label: "Winter (Jul – Sep) — Closed", disabled: true },
+    { value: "Spring", label: "Spring (Oct – Dec)", disabled: false },
   ],
   Advanced: [
-    { value: "Session1", label: "First Session (Jan – Jun)" },
-    { value: "Session2", label: "Second Session (Jul – Dec)" },
+    { value: "Session1", label: "First Session (Jan – Jun) — Closed", disabled: true },
+    { value: "Session2", label: "Second Session (Jul – Dec) — Closed", disabled: true },
   ],
 };
 

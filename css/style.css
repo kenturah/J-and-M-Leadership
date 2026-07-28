@@ -767,3 +767,10 @@ option:disabled {
 .tier-disabled button {
   pointer-events: auto; /* Ensures the not-allowed cursor displays on hover */
 }
+
+/* Muted Disabled Session Tags in Course Cards */
+.session-tags li.tag-disabled {
+  background: #e5e7eb !important;
+  color: #9ca3af !important;
+  cursor: not-allowed;
+}
