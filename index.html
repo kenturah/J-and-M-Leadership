@@ -261,7 +261,7 @@
                 Enroll &mdash; Basic
               </button>
             </div>
-            <!-- advanced__management -->
+            <!-- advanced__management
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Advanced</span>
@@ -283,7 +283,25 @@
                 Enroll &mdash; Advanced
               </button>
             </div>
-          </article>
+          </article> -->
+          <div class="tier tier-disabled">
+              <div class="tier-head">
+                <span class="tier-name">Advanced (6-Month Program)</span>
+                <span class="tier-price">&#8358;250,000</span>
+              </div>
+              <p class="tier-schedule">
+                Runs twice a year &mdash; <em>Currently Closed for Enrollment</em>
+              </p>
+              <button
+                type="button"
+                class="btn btn-gold btn-enroll btn-disabled"
+                data-course="Management"
+                data-level="Advanced"
+                disabled
+              >
+                Enrollment Paused &mdash; Advanced
+              </button>
+            </div>
 
           <!-- Entrepreneurship -->
           <article class="card course-card">
@@ -312,7 +330,7 @@
                 Enroll &mdash; Basic
               </button>
             </div>
-            <!-- advanced__entrepreneurship -->
+            <!-- advanced__entrepreneurship
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Advanced</span>
@@ -333,7 +351,26 @@
               >
                 Enroll &mdash; Advanced
               </button>
+            </div> -->
+            <div class="tier tier-disabled">
+              <div class="tier-head">
+                <span class="tier-name">Advanced (6-Month Program)</span>
+                <span class="tier-price">&#8358;250,000</span>
+              </div>
+              <p class="tier-schedule">
+                Runs twice a year &mdash; <em>Currently Closed for Enrollment</em>
+              </p>
+              <button
+                type="button"
+                class="btn btn-gold btn-enroll btn-disabled"
+                data-course="Entrepreneurship"
+                data-level="Advanced"
+                disabled
+              >
+                Enrollment Paused &mdash; Advanced
+              </button>
             </div>
+
           </article>
 
           <!-- Sales -->
@@ -363,7 +400,7 @@
                 Enroll &mdash; Basic
               </button>
             </div>
-            <!-- advanced__sales -->
+            <!-- advanced__sales
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Advanced</span>
@@ -386,8 +423,26 @@
               </button>
             </div>
           </article>
+        </div> -->
+        <div class="tier tier-disabled">
+              <div class="tier-head">
+                <span class="tier-name">Advanced (6-Month Program)</span>
+                <span class="tier-price">&#8358;250,000</span>
+              </div>
+              <p class="tier-schedule">
+                Runs twice a year &mdash; <em>Currently Closed for Enrollment</em>
+              </p>
+              <button
+                type="button"
+                class="btn btn-gold btn-enroll btn-disabled"
+                data-course="Sales"
+                data-level="Advanced"
+                disabled
+              >
+                Enrollment Paused &mdash; Advanced
+              </button>
         </div>
-
+    
         <!-- Enrollment form -->
         <div class="card enroll-form" id="enroll-form">
           <h3>Enroll in a Course</h3>
@@ -411,20 +466,29 @@
               <option value="Management-Basic">
                 Management &ndash; Basic (&#8358;150,000)
               </option>
-              <option value="Management-Advanced">
+              <!-- <option value="Management-Advanced">
                 Management &ndash; Advanced (&#8358;250,000)
+              </option> -->
+              <option value="Management-Advanced" disabled>
+                Management &ndash; Advanced (6 Months) &mdash; Currently Unavailable
               </option>
               <option value="Entrepreneurship-Basic">
                 Entrepreneurship &ndash; Basic (&#8358;150,000)
               </option>
-              <option value="Entrepreneurship-Advanced">
+              <!-- <option value="Entrepreneurship-Advanced">
                 Entrepreneurship &ndash; Advanced (&#8358;250,000)
+              </option> -->
+              <option value="Entrepreneurship-Advanced" disabled>
+                Entrepreneurship &ndash; Advanced (6 Months) &mdash; Currently Unavailable
               </option>
               <option value="Sales-Basic">
                 Sales &ndash; Basic (&#8358;150,000)
               </option>
-              <option value="Sales-Advanced">
+              <!-- <option value="Sales-Advanced">
                 Sales &ndash; Advanced (&#8358;250,000)
+              </option> -->
+              <option value="Sales-Advanced" disabled>
+                Sales &ndash; Advanced (6 Months) &mdash; Currently Unavailable
               </option>
             </select>
 
