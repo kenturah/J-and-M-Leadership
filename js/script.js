@@ -165,6 +165,20 @@ function handleFormSubmit(formId, statusId, successMessage, tableName, mapFn) {
       return;
     }
 
+    // ==========================================
+    // META PIXEL CUSTOM EVENT TRACKING STARTS HERE
+    // ==========================================
+    if (typeof fbq === "function") {
+      if (formId === "enrollmentForm") {
+        fbq("track", "CompleteRegistration", { content_name: "Course Enrollment" });
+      } else if (formId === "contactForm") {
+        fbq("track", "Contact", { content_name: "Contact Message" });
+      } else if (formId === "consultForm") {
+        fbq("track", "Schedule", { content_name: "Consultation Request" });
+      }
+    }
+    // ==========================================
+
     status.textContent = successMessage;
     status.className = "form-status success";
     form.reset();
