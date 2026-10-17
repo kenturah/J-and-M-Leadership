@@ -32,17 +32,25 @@ async function sendEmail(to: string, subject: string, html: string) {
 }
 
 function buildEnrollmentEmails(record: any) {
-  const { course, level, session, full_name, email, phone } = record;
+  const { course, level, session, full_name, email, phone, payment_option, amount_due } = record;
+  const bank = `${Deno.env.get("BANK_NAME") ?? "[BANK NAME]"} &middot; ${Deno.env.get("BANK_ACCOUNT_NAME") ?? "[ACCOUNT NAME]"} &middot; ${Deno.env.get("BANK_ACCOUNT_NUMBER") ?? "[ACCOUNT NUMBER]"}`;
+  const amount = Number(amount_due ?? 0).toLocaleString("en-NG");
 
   const userHtml = `
-    <h2>Thanks for enrolling, ${full_name}!</h2>
-    <p>We've received your enrollment request for:</p>
+    <h2>Thanks for registering, ${full_name}!</h2>
+    <p>We've received your request for:</p>
     <ul>
-      <li><strong>Course:</strong> ${course} &ndash; ${level}</li>
-      <li><strong>Session:</strong> ${session}</li>
+      <li><strong>Course:</strong> ${course} &ndash; ${level} (50% off, certification included)</li>
+      <li><strong>Session:</strong> ${session} &middot; Classes start 26 October 2026</li>
+      <li><strong>Payment option:</strong> ${payment_option}</li>
+      <li><strong>Amount due:</strong> &#8358;${amount}</li>
     </ul>
-    <p>Our team will reach out shortly to confirm your spot and payment details.</p>
-    <p>&mdash; J&amp;M Leadership and Management Limited</p>
+    <h3>Next step: make your payment</h3>
+    <p>Bank transfer to: <strong>${bank}</strong></p>
+    <p>Please reply to this email with your proof of payment before <strong>23 October 2026</strong>.</p>
+    <p><strong>Important:</strong> your registration is only confirmed once payment has been verified.
+    You will then receive your confirmation, WhatsApp Channel link and onboarding details.</p>
+    <p>&mdash; J&amp;M Academy</p>
   `;
 
   const adminHtml = `
@@ -53,13 +61,16 @@ function buildEnrollmentEmails(record: any) {
       <li><strong>Phone:</strong> ${phone}</li>
       <li><strong>Course:</strong> ${course} &ndash; ${level}</li>
       <li><strong>Session:</strong> ${session}</li>
+      <li><strong>Payment option:</strong> ${payment_option}</li>
+      <li><strong>Amount due:</strong> &#8358;${amount}</li>
+      <li><strong>Status:</strong> Pending payment verification</li>
     </ul>
   `;
 
   return {
-    userSubject: "Your J&M Leadership Enrollment — Received",
+    userSubject: "Your J&M Academy Registration — Complete Your Payment",
     userHtml,
-    adminSubject: `New Enrollment: ${full_name} — ${course} (${level})`,
+    adminSubject: `New Enrollment: ${full_name} — ${course} (${level}) — ${payment_option}`,
     adminHtml,
   };
 }

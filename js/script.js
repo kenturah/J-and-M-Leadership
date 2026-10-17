@@ -32,13 +32,81 @@ window.addEventListener("resize", () => {
   if (window.innerWidth > 950) closeNav();
 });
 
+// =====================================================================
+// CAMPAIGN CONFIG — the ONLY place to edit fee, dates, bank & installments
+// =====================================================================
+const CAMPAIGN = {
+  originalFee: 150000,
+  discountPercent: 50,
+  startDate: "26 October 2026",
+  deadlineLabel: "23 October 2026",
+  deadlineISO: "2026-10-23T23:59:59+01:00", // registration closes end of day (Lagos)
+  session: "Spring",
+  bank: { name: "[BANK NAME]", accountName: "[ACCOUNT NAME]", accountNumber: "[ACCOUNT NUMBER]" },
+  // Set approved:true ONLY after the MD approves the structure. Until then the option stays disabled.
+  installment: {
+    approved: false,
+    initial: 40000,
+    count: 2,
+    each: 35000,
+    deadlines: ["26 October 2026 (initial)", "[DATE]"],
+    finalDate: "[DATE]",
+    missedPolicy: "[WHAT HAPPENS IF A DEADLINE IS MISSED]",
+    certAfterFullPayment: true,
+  },
+};
+CAMPAIGN.salePrice = CAMPAIGN.originalFee * (1 - CAMPAIGN.discountPercent / 100);
+const naira = (n) => "\u20A6" + Number(n).toLocaleString("en-NG");
+const registrationClosed = () => new Date() > new Date(CAMPAIGN.deadlineISO);
+
+// Fill prices/dates everywhere from the config
+document.querySelectorAll(".js-price-old").forEach((el) => (el.textContent = naira(CAMPAIGN.originalFee)));
+document.querySelectorAll(".js-price-new").forEach((el) => (el.textContent = naira(CAMPAIGN.salePrice)));
+document.querySelectorAll(".js-deadline").forEach((el) => (el.textContent = CAMPAIGN.deadlineLabel));
+document.querySelectorAll(".js-startdate").forEach((el) => (el.textContent = CAMPAIGN.startDate));
+
+// Installment option stays disabled until approved
+const optInstallment = document.getElementById("optInstallment");
+if (optInstallment && !CAMPAIGN.installment.approved) {
+  optInstallment.disabled = true;
+  optInstallment.textContent = "Installment payment (schedule coming soon)";
+}
+
+// Payment summary shown under the dropdown
+function renderPaymentSummary() {
+  const box = document.getElementById("paymentSummary");
+  const choice = document.getElementById("paymentOption")?.value;
+  if (!box) return;
+  if (!choice) { box.hidden = true; return; }
+  const b = CAMPAIGN.bank;
+  const bank = `<p><b>Bank transfer:</b> ${b.name} &middot; ${b.accountName} &middot; ${b.accountNumber}</p>`;
+  if (choice === "One-off") {
+    box.innerHTML = `<p>Total (50% off, certification included): <span class="amt">${naira(CAMPAIGN.salePrice)}</span></p>${bank}<p>Payment details will also be emailed to you. Your place is confirmed once payment is verified.</p>`;
+  } else {
+    const i = CAMPAIGN.installment;
+    box.innerHTML = `<p>Total: <span class="amt">${naira(CAMPAIGN.salePrice)}</span></p>
+      <p>Initial payment: ${naira(i.initial)} &middot; ${i.count} further installment(s) of ${naira(i.each)}</p>
+      <p>Deadlines: ${i.deadlines.join("; ")}. Full fee due by ${i.finalDate}.</p>
+      <p>Missed deadline: ${i.missedPolicy}</p>
+      ${i.certAfterFullPayment ? "<p>Certificate is issued after full payment.</p>" : ""}${bank}`;
+  }
+  box.hidden = false;
+}
+document.getElementById("paymentOption")?.addEventListener("change", renderPaymentSummary);
+
+// Close the form automatically after the deadline
+if (registrationClosed()) {
+  const f = document.getElementById("enrollmentForm");
+  if (f) f.innerHTML = '<p class="registration-closed">Registration for this cohort has closed. Please contact us for the next intake.</p>';
+}
+
 // ---- Session options per level. Edit dates here once confirmed — everything else updates automatically. ----
 const SESSIONS_BY_LEVEL = {
   Basic: [
     { value: "Summer", label: "Summer (Jan – Mar) — Closed", disabled: true },
     { value: "Autumn", label: "Autumn (Apr – Jun) — Closed", disabled: true },
     { value: "Winter", label: "Winter (Jul – Sep) — Closed", disabled: true },
-    { value: "Spring", label: "Spring (Oct – Dec)", disabled: false },
+    { value: "Spring", label: "Spring (Oct – Dec) — Starts 26 Oct", disabled: false },
   ],
   Advanced: [
     { value: "Session1", label: "First Session (Jan – Jun) — Closed", disabled: true },
@@ -185,6 +253,8 @@ function handleFormSubmit(formId, statusId, successMessage, tableName, mapFn) {
     form.classList.remove("was-validated");
 
     if (formId === "enrollmentForm") {
+      const ps = document.getElementById("paymentSummary");
+      if (ps) ps.hidden = true;
       const sessionSelect = document.getElementById("sessionSelect");
       sessionSelect.innerHTML =
         '<option value="">Select a course first</option>';
@@ -202,7 +272,7 @@ function handleFormSubmit(formId, statusId, successMessage, tableName, mapFn) {
 handleFormSubmit(
   "enrollmentForm",
   "enrollStatus",
-  "Thanks! Your enrollment request has been received — we'll be in touch shortly.",
+  "Thanks! Your request is received. Check your email for payment details — your place is confirmed once payment is verified.",
   "enrollments",
   (fd) => {
     const [course, level] = fd.get("courseSelect").split("-");
@@ -210,6 +280,12 @@ handleFormSubmit(
       course,
       level,
       session: fd.get("sessionSelect"),
+      payment_option: fd.get("paymentOption"),
+      amount_due: CAMPAIGN.salePrice,
+      amount_paid: 0,
+      payment_status: "Pending",
+      registration_status: "Pending payment",
+      course_start_date: "2026-10-26",
       full_name: fd.get("enrollName"),
       email: fd.get("enrollEmail"),
       phone: fd.get("enrollPhone"),
@@ -253,27 +329,46 @@ const heroStatements = [
 ];
 
 let heroIndex = 0;
-const heroHeading = document.getElementById("heroHeading");
+const heroHeading = document.getElementById("heroSub");
+
 
 function rotateHeroText() {
   if (!heroHeading) return;
-
-  heroHeading.classList.add("fade-out");
-
+  heroHeading.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+  heroHeading.style.opacity = 0;
+  heroHeading.style.transform = "translateY(8px)";
   setTimeout(() => {
     heroIndex = (heroIndex + 1) % heroStatements.length;
     heroHeading.textContent = heroStatements[heroIndex];
-
-    // Force browser reflow to trigger transition smooth re-entry
-    // Force the browser to acknowledge the new state
-    // before we remove the class, so the transition actually fires
-    void heroHeading.offsetWidth;  // forces reflow
-
-    requestAnimationFrame(() => {
-      heroHeading.classList.remove("fade-out");
-    });
+    heroHeading.style.opacity = 0.88;
+    heroHeading.style.transform = "none";
   }, 600);
 }
 
 setInterval(rotateHeroText, 6000);
+
+
+// function rotateHeroText() {
+//   if (!heroHeading) return;
+//   heroHeading.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+//   heroHeading.style.opacity = 0;
+//   heroHeading.style.transform = "translateY(8px)";
+//   heroHeading.classList.add("fade-out");
+
+//   setTimeout(() => {
+//     heroIndex = (heroIndex + 1) % heroStatements.length;
+//     heroHeading.textContent = heroStatements[heroIndex];
+
+//     // Force browser reflow to trigger transition smooth re-entry
+//     // Force the browser to acknowledge the new state
+//     // before we remove the class, so the transition actually fires
+//     void heroHeading.offsetWidth;  // forces reflow
+
+//     requestAnimationFrame(() => {
+//       heroHeading.classList.remove("fade-out");
+//     });
+//   }, 600);
+// }
+
+// setInterval(rotateHeroText, 6000);
 

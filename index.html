@@ -45,7 +45,11 @@
       rel="stylesheet"
     />
     <!-- css styles -->
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/upgrade.css" />
 
     <!-- Meta Pixel Code -->
     <script>
@@ -77,6 +81,7 @@
     ></script>
     <!-- javascript -->
     <script src="js/script.js" defer></script>
+    <script src="js/upgrade.js" defer></script>
   </head>
 
   <body>
@@ -127,11 +132,12 @@
 
     <!-- HOME -->
     <section class="hero" id="home">
+      <a href="#courses" class="hero-offer"><b>50% OFF</b> Basic courses &middot; enroll before <span class="js-deadline">23 October 2026</span></a>
       <div class="hero-box">
         <h1 id="heroHeading">
           Become a Certified Leader, Manager, Entrepreneur or Sales Expert
         </h1>
-        <p>
+        <p id="heroSub">
           Premium training and consulting built for ambitious professionals and
           future executives.
         </p>
@@ -198,6 +204,13 @@
           and start dates.
         </p>
         
+        <div class="promo-banner" id="promoBanner">
+          <strong>50% OFF all Basic courses</strong> &mdash; certification included.
+          <span class="promo-dates">Registration closes
+            <b class="js-deadline">23 October 2026</b> &middot; Classes start
+            <b class="js-startdate">26 October 2026</b></span>
+        </div>
+
         <div class="grid course-grid">
           <!-- Leadership -->
           <article class="card course-card">
@@ -206,8 +219,9 @@
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Basic</span>
-                <span class="tier-price">&#8358;150,000</span>
+                <span class="tier-price tier-price-sale"><span class="price-badge">50% OFF</span><s class="price-old js-price-old">&#8358;150,000</s><span class="price-new js-price-new">&#8358;75,000</span></span>
               </div>
+              <p class="cert-note">&#10003; Certification included</p>
               <p class="tier-schedule">
                 4 quarterly sessions &mdash; choose one at enrollment:
               </p>
@@ -220,7 +234,7 @@
               <button
                 type="button"
                 class="btn btn-blue btn-enroll"
-                data-course="Entrepreneurship"
+                data-course="Leadership"
                 data-level="Basic"
               >
                 Enroll &mdash; Basic
@@ -277,8 +291,9 @@
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Basic</span>
-                <span class="tier-price">&#8358;150,000</span>
+                <span class="tier-price tier-price-sale"><span class="price-badge">50% OFF</span><s class="price-old js-price-old">&#8358;150,000</s><span class="price-new js-price-new">&#8358;75,000</span></span>
               </div>
+              <p class="cert-note">&#10003; Certification included</p>
               <p class="tier-schedule">
                 4 quarterly sessions &mdash; choose one at enrollment:
               </p>
@@ -348,8 +363,9 @@
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Basic</span>
-                <span class="tier-price">&#8358;150,000</span>
+                <span class="tier-price tier-price-sale"><span class="price-badge">50% OFF</span><s class="price-old js-price-old">&#8358;150,000</s><span class="price-new js-price-new">&#8358;75,000</span></span>
               </div>
+              <p class="cert-note">&#10003; Certification included</p>
               <p class="tier-schedule">
                 4 quarterly sessions &mdash; choose one at enrollment:
               </p>
@@ -419,8 +435,9 @@
             <div class="tier">
               <div class="tier-head">
                 <span class="tier-name">Basic</span>
-                <span class="tier-price">&#8358;150,000</span>
+                <span class="tier-price tier-price-sale"><span class="price-badge">50% OFF</span><s class="price-old js-price-old">&#8358;150,000</s><span class="price-new js-price-new">&#8358;75,000</span></span>
               </div>
+              <p class="cert-note">&#10003; Certification included</p>
               <p class="tier-schedule">
                 4 quarterly sessions &mdash; choose one at enrollment:
               </p>
@@ -488,8 +505,8 @@
         <div class="card enroll-form" id="enroll-form">
           <h3>Enroll in a Course</h3>
           <p class="small">
-            Pick your track and level, add your details, and we'll reach out to
-            confirm your spot and payment.
+            Pick your track and level, add your details, and we'll email you the
+            payment details to confirm your spot.
           </p>
 
           <form id="enrollmentForm" novalidate>
@@ -497,7 +514,7 @@
             <select id="courseSelect" name="courseSelect" required>
               <option value="">Select a course</option>
               <option value="Leadership-Basic">
-                Leadership &ndash; Basic (&#8358;150,000)
+                Leadership &ndash; Basic (&#8358;75,000 &ndash; 50% off)
               </option>
               <!-- <option value="Leadership-Advanced">
                 Leadership &ndash; Advanced (&#8358;250,000) -->
@@ -505,7 +522,7 @@
                 Leadership &ndash; Advanced (6 Months) &mdash; Currently Unavailable
               </option>
               <option value="Management-Basic">
-                Management &ndash; Basic (&#8358;150,000)
+                Management &ndash; Basic (&#8358;75,000 &ndash; 50% off)
               </option>
               <!-- <option value="Management-Advanced">
                 Management &ndash; Advanced (&#8358;250,000)
@@ -514,7 +531,7 @@
                 Management &ndash; Advanced (6 Months) &mdash; Currently Unavailable
               </option>
               <option value="Entrepreneurship-Basic">
-                Entrepreneurship &ndash; Basic (&#8358;150,000)
+                Entrepreneurship &ndash; Basic (&#8358;75,000 &ndash; 50% off)
               </option>
               <!-- <option value="Entrepreneurship-Advanced">
                 Entrepreneurship &ndash; Advanced (&#8358;250,000)
@@ -523,7 +540,7 @@
                 Entrepreneurship &ndash; Advanced (6 Months) &mdash; Currently Unavailable
               </option>
               <option value="Sales-Basic">
-                Sales &ndash; Basic (&#8358;150,000)
+                Sales &ndash; Basic (&#8358;75,000 &ndash; 50% off)
               </option>
               <!-- <option value="Sales-Advanced">
                 Sales &ndash; Advanced (&#8358;250,000)
@@ -570,7 +587,20 @@
               required
             />
 
-            <br /><br />
+            <label for="paymentOption">Payment Option</label>
+            <select id="paymentOption" name="paymentOption" required>
+              <option value="">Select payment option</option>
+              <option value="One-off">One-off payment (full fee at once)</option>
+              <option value="Installment" id="optInstallment">Installment payment</option>
+            </select>
+
+            <div class="payment-summary" id="paymentSummary" hidden></div>
+
+            <p class="small">
+              Registration is only confirmed after your payment has been
+              verified. Completing this form alone does not secure your place.
+            </p>
+            <br />
             <button type="submit" class="btn btn-gold">
               Submit Enrollment
             </button>
