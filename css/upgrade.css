@@ -168,3 +168,22 @@ footer { background: var(--navy-deep); border-top: 3px solid var(--gold); letter
 }
 .hero-offer b { white-space: nowrap; flex-shrink: 0; }
 @media (max-width: 600px) { .hero-offer { font-size: 0.82rem; line-height: 1.35; border-radius: 18px; } }
+
+/* ---------- church code field ---------- */
+.code-row { display: flex; gap: 10px; align-items: stretch; }
+.code-row input { flex: 1; min-width: 0; }
+.code-row .btn { padding: 0 22px; }
+#codeStatus { min-height: 1.2em; margin: 6px 0 12px; font-weight: 600; }
+
+/* ---------- MOBILE HERO FIXES ---------- */
+.hero { min-height: 100vh; min-height: 100svh; }
+@media (max-width: 600px) {
+  .hero { padding: 96px 20px 56px; align-items: center; }
+  .hero::before { inset: 0; animation: none; background-position: 62% center; opacity: 0.16; }
+  .hero::after { background-size: 44px 44px; }
+  .hero h1 { font-size: clamp(2rem, 9vw, 2.5rem); line-height: 1.1; }
+  .hero p { min-height: 0; font-size: 1rem; margin-bottom: 24px; }
+  .hero .actions { flex-direction: column; align-items: stretch; gap: 12px; }
+  .hero .actions a { text-align: center; width: 100%; }
+  .hero-offer { margin-bottom: 22px; }
+}

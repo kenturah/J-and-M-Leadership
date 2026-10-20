@@ -32,7 +32,14 @@ async function sendEmail(to: string, subject: string, html: string) {
 }
 
 function buildEnrollmentEmails(record: any) {
-  const { course, level, session, full_name, email, phone, payment_option, amount_due } = record;
+  const { course, level, session, full_name, email, phone, payment_option, amount_due, member_type } = record;
+  const isChurch = member_type === "Church";
+  const isInst = payment_option === "Installment";
+  const scheduleHtml = isInst
+    ? (isChurch
+        ? `<li><strong>Installment plan:</strong> &#8358;10,000 now + &#8358;10,000 by 26 November 2026</li>`
+        : `<li><strong>Installment plan:</strong> initial payment now; full fee completed by 26 November 2026</li>`)
+    : "";
   const bank = `${Deno.env.get("BANK_NAME") ?? "[BANK NAME]"} &middot; ${Deno.env.get("BANK_ACCOUNT_NAME") ?? "[ACCOUNT NAME]"} &middot; ${Deno.env.get("BANK_ACCOUNT_NUMBER") ?? "[ACCOUNT NUMBER]"}`;
   const amount = Number(amount_due ?? 0).toLocaleString("en-NG");
 
@@ -40,10 +47,11 @@ function buildEnrollmentEmails(record: any) {
     <h2>Thanks for registering, ${full_name}!</h2>
     <p>We've received your request for:</p>
     <ul>
-      <li><strong>Course:</strong> ${course} &ndash; ${level} (50% off, certification included)</li>
+      <li><strong>Course:</strong> ${course} &ndash; ${level} (${isChurch ? "church member rate, certificate &amp; student package included" : "50% off, certification included"})</li>
       <li><strong>Session:</strong> ${session} &middot; Classes start 26 October 2026</li>
       <li><strong>Payment option:</strong> ${payment_option}</li>
-      <li><strong>Amount due:</strong> &#8358;${amount}</li>
+      <li><strong>Total fee:</strong> &#8358;${amount}</li>
+      ${scheduleHtml}
     </ul>
     <h3>Next step: make your payment</h3>
     <p>Bank transfer to: <strong>${bank}</strong></p>
@@ -61,8 +69,10 @@ function buildEnrollmentEmails(record: any) {
       <li><strong>Phone:</strong> ${phone}</li>
       <li><strong>Course:</strong> ${course} &ndash; ${level}</li>
       <li><strong>Session:</strong> ${session}</li>
+      <li><strong>Member type:</strong> ${member_type ?? "Public"}${record.promo_code ? " (code: " + record.promo_code + ")" : ""}</li>
       <li><strong>Payment option:</strong> ${payment_option}</li>
-      <li><strong>Amount due:</strong> &#8358;${amount}</li>
+      <li><strong>Total fee:</strong> &#8358;${amount}</li>
+      ${isInst ? `<li><strong>Balance due:</strong> 26 November 2026</li>` : ""}
       <li><strong>Status:</strong> Pending payment verification</li>
     </ul>
   `;

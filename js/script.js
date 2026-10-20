@@ -1,5 +1,5 @@
 // ---- Render Lucide icons (runs after the Lucide CDN script has loaded) ----
-lucide.createIcons();
+window.lucide && lucide.createIcons();
 
 // ---- Mobile nav: hamburger toggle, close on link click, lock scroll while open ----
 const navToggle = document.getElementById("navToggle");
@@ -42,8 +42,12 @@ const CAMPAIGN = {
   deadlineLabel: "23 October 2026",
   deadlineISO: "2026-10-23T23:59:59+01:00", // registration closes end of day (Lagos)
   session: "Spring",
-  bank: { name: "[BANK NAME]", accountName: "[ACCOUNT NAME]", accountNumber: "[ACCOUNT NUMBER]" },
-  // Set approved:true ONLY after the MD approves the structure. Until then the option stays disabled.
+  balanceDueLabel: "26 November 2026", // installment completion deadline (all students)
+  balanceDueISO: "2026-11-26",
+  bank: { name: "[FIDELITY]", accountName: "[J&M LEADERSHIP AND MANAGEMENT ACACEMY LIMITED]", accountNumber: "[5601413757]" },
+  missedPolicy: "Your registration stays incomplete until the full fee is paid.",
+
+  // PUBLIC installment — Set approved:true ONLY after the MD approves the structure. Until then the option stays disabled.
   installment: {
     approved: false,
     initial: 40000,
@@ -51,13 +55,35 @@ const CAMPAIGN = {
     each: 35000,
     deadlines: ["26 October 2026 (initial)", "[DATE]"],
     finalDate: "[DATE]",
-    missedPolicy: "[WHAT HAPPENS IF A DEADLINE IS MISSED]",
     certAfterFullPayment: true,
+  },
+
+  // CHURCH MEMBER rate: N15,000 course fee + N5,000 certificate & student package
+  church: {
+    // Share this link:  https://jandmcompanylimited.com/?code=CHURCH20   (add/rename codes here)
+    codes: ["CHURCH20"],
+    price: 20000,
+    courseFee: 15000,
+    certAndPackage: 5000,
+    initial: 10000,
+    balance: 10000,
   },
 };
 CAMPAIGN.salePrice = CAMPAIGN.originalFee * (1 - CAMPAIGN.discountPercent / 100);
 const naira = (n) => "\u20A6" + Number(n).toLocaleString("en-NG");
 const registrationClosed = () => new Date() > new Date(CAMPAIGN.deadlineISO);
+
+// ---- Current pricing (public vs church) ----
+let memberMode = false;
+let activeCode = null;
+
+function getPricing() {
+  const c = CAMPAIGN.church, i = CAMPAIGN.installment;
+  if (memberMode) {
+    return { type: "Church", total: c.price, installmentOK: true, initial: c.initial, count: 1, each: c.balance, certAfterFull: true };
+  }
+  return { type: "Public", total: CAMPAIGN.salePrice, installmentOK: i.approved, initial: i.initial, count: i.count, each: i.each, certAfterFull: i.certAfterFullPayment };
+}
 
 // Fill prices/dates everywhere from the config
 document.querySelectorAll(".js-price-old").forEach((el) => (el.textContent = naira(CAMPAIGN.originalFee)));
@@ -67,9 +93,58 @@ document.querySelectorAll(".js-startdate").forEach((el) => (el.textContent = CAM
 
 // Installment option stays disabled until approved
 const optInstallment = document.getElementById("optInstallment");
-if (optInstallment && !CAMPAIGN.installment.approved) {
-  optInstallment.disabled = true;
-  optInstallment.textContent = "Installment payment (schedule coming soon)";
+function refreshInstallmentOption() {
+  if (!optInstallment) return;
+  const ok = getPricing().installmentOK;
+  optInstallment.disabled = !ok;
+  optInstallment.textContent = ok ? "Installment payment" : "Installment payment (schedule coming soon)";
+}
+
+// ---- Apply / remove church rate across the whole page ----
+function applyPricingMode() {
+  const c = CAMPAIGN.church;
+  document.querySelectorAll(".js-price-new").forEach((el) => (el.textContent = naira(memberMode ? c.price : CAMPAIGN.salePrice)));
+  document.querySelectorAll(".price-badge").forEach((el) => (el.textContent = memberMode ? "CHURCH RATE" : "50% OFF"));
+  document.querySelectorAll(".cert-note").forEach((el) => (el.textContent = memberMode ? "\u2713 Certificate & student package included" : "\u2713 Certification included"));
+
+  const banner = document.getElementById("promoBanner");
+  if (banner) {
+    if (!banner.dataset.orig) banner.dataset.orig = banner.innerHTML;
+    banner.innerHTML = memberMode
+      ? `<strong>Church member rate: ${naira(c.price)}</strong> per Basic course &mdash; ${naira(c.courseFee)} course fee + ${naira(c.certAndPackage)} certificate &amp; student package.
+         <span class="promo-dates">Registration closes <b>${CAMPAIGN.deadlineLabel}</b> &middot; Classes start <b>${CAMPAIGN.startDate}</b> &middot; Installment balance due <b>${CAMPAIGN.balanceDueLabel}</b></span>`
+      : banner.dataset.orig;
+  }
+  const pill = document.querySelector(".hero-offer b");
+  if (pill) pill.textContent = memberMode ? "CHURCH RATE" : "50% OFF";
+
+  document.querySelectorAll("#courseSelect option").forEach((o) => {
+    if (!o.value.endsWith("-Basic")) return;
+    if (!o.dataset.orig) o.dataset.orig = o.textContent;
+    o.textContent = memberMode
+      ? o.dataset.orig.replace(/\(.*\)/s, `(${naira(c.price)} \u2013 church rate)`)
+      : o.dataset.orig;
+  });
+  refreshInstallmentOption();
+  const sel = document.getElementById("paymentOption");
+  if (sel && sel.value === "Installment" && !getPricing().installmentOK) sel.value = "";
+  renderPaymentSummary();
+}
+
+function tryApplyCode(raw, fromLink) {
+  const code = (raw || "").trim().toUpperCase();
+  const status = document.getElementById("codeStatus");
+  if (CAMPAIGN.church.codes.map((x) => x.toUpperCase()).includes(code)) {
+    memberMode = true; activeCode = code;
+    applyPricingMode();
+    if (status) { status.textContent = "Promo code applied: " + naira(CAMPAIGN.church.price) + " per course."; status.style.color = "var(--success)"; }
+    const input = document.getElementById("memberCode"); if (input) input.value = code;
+    return true;
+  }
+  memberMode = false; activeCode = null;
+  applyPricingMode();
+  if (status) { status.textContent = code ? "That code isn't valid. Check it and try again." : ""; status.style.color = "var(--danger)"; }
+  return false;
 }
 
 // Payment summary shown under the dropdown
@@ -78,21 +153,32 @@ function renderPaymentSummary() {
   const choice = document.getElementById("paymentOption")?.value;
   if (!box) return;
   if (!choice) { box.hidden = true; return; }
-  const b = CAMPAIGN.bank;
+  const p = getPricing(), b = CAMPAIGN.bank;
+  const rate = memberMode ? "Church member rate (course fee + certificate &amp; student package)" : "50% off, certification included";
   const bank = `<p><b>Bank transfer:</b> ${b.name} &middot; ${b.accountName} &middot; ${b.accountNumber}</p>`;
   if (choice === "One-off") {
-    box.innerHTML = `<p>Total (50% off, certification included): <span class="amt">${naira(CAMPAIGN.salePrice)}</span></p>${bank}<p>Payment details will also be emailed to you. Your place is confirmed once payment is verified.</p>`;
+    box.innerHTML = `<p>Total (${rate}): <span class="amt">${naira(p.total)}</span></p>${bank}<p>Payment details will also be emailed to you. Your place is confirmed once payment is verified.</p>`;
   } else {
-    const i = CAMPAIGN.installment;
-    box.innerHTML = `<p>Total: <span class="amt">${naira(CAMPAIGN.salePrice)}</span></p>
-      <p>Initial payment: ${naira(i.initial)} &middot; ${i.count} further installment(s) of ${naira(i.each)}</p>
-      <p>Deadlines: ${i.deadlines.join("; ")}. Full fee due by ${i.finalDate}.</p>
-      <p>Missed deadline: ${i.missedPolicy}</p>
-      ${i.certAfterFullPayment ? "<p>Certificate is issued after full payment.</p>" : ""}${bank}`;
+    box.innerHTML = `<p>Total (${rate}): <span class="amt">${naira(p.total)}</span></p>
+      <p>Pay now: <b>${naira(p.initial)}</b> &middot; ${p.count} further installment of <b>${naira(p.each)}</b></p>
+      <p>Final deadline for the full fee: <b>${CAMPAIGN.balanceDueLabel}</b></p>
+      <p>${CAMPAIGN.missedPolicy}</p>
+      ${p.certAfterFull ? "<p>Certificate is issued after full payment.</p>" : ""}${bank}`;
   }
   box.hidden = false;
 }
+
 document.getElementById("paymentOption")?.addEventListener("change", renderPaymentSummary);
+document.getElementById("applyCode")?.addEventListener("click", () => tryApplyCode(document.getElementById("memberCode").value));
+document.getElementById("memberCode")?.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); tryApplyCode(e.target.value); } });
+
+refreshInstallmentOption();
+
+// Church link: ?code=CHURCH20 applies the rate automatically and jumps to the courses
+const linkCode = new URLSearchParams(window.location.search).get("code");
+if (linkCode && tryApplyCode(linkCode, true)) {
+  window.addEventListener("load", () => setTimeout(() => document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" }), 600));
+}
 
 // Close the form automatically after the deadline
 if (registrationClosed()) {
@@ -281,7 +367,10 @@ handleFormSubmit(
       level,
       session: fd.get("sessionSelect"),
       payment_option: fd.get("paymentOption"),
-      amount_due: CAMPAIGN.salePrice,
+      member_type: getPricing().type,
+      promo_code: activeCode,
+      amount_due: getPricing().total,
+      balance_due_date: fd.get("paymentOption") === "Installment" ? CAMPAIGN.balanceDueISO : null,
       amount_paid: 0,
       payment_status: "Pending",
       registration_status: "Pending payment",
@@ -323,8 +412,8 @@ handleFormSubmit(
 
 // ---- Hero Section Text Slider ----
 const heroStatements = [
-  "Become a Certified Leader, Manager, Entrepreneur or Sales Expert",
   "In partnership with MYLIFE2LIVE academy, USA to provide globally relevant training and certifications.",
+  "Premium training and consulting built for ambitious professionals and future executives.",
   "We offer high-impact corporate training and strategic workforce development designed to empower leaders and elevate team performance."
 ];
 

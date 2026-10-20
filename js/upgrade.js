@@ -1,7 +1,11 @@
 // J&M UPGRADE LAYER — scroll reveals, header state, progress bar. Safe to delete (site works without it).
 (function () {
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // Safety: the offer pill must live inside .hero-box (first child), or it can sit beside the headline
+  const pillEl = document.querySelector(".hero-offer"), boxEl = document.querySelector(".hero-box");
+  if (pillEl && boxEl && pillEl.parentElement !== boxEl) boxEl.insertBefore(pillEl, boxEl.firstChild);
 
+ const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+ 
   // header + progress bar
   const header = document.querySelector("header");
   const bar = document.createElement("div");

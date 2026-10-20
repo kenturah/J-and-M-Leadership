@@ -587,6 +587,13 @@
               required
             />
 
+            <label for="memberCode">Promo code <span class="small">(optional)</span></label>
+            <div class="code-row">
+              <input id="memberCode" name="memberCode" type="text" autocomplete="off" placeholder="Enter promo code" />
+              <button type="button" class="btn btn-blue" id="applyCode">Apply</button>
+            </div>
+            <p class="small" id="codeStatus" aria-live="polite"></p>
+            
             <label for="paymentOption">Payment Option</label>
             <select id="paymentOption" name="paymentOption" required>
               <option value="">Select payment option</option>

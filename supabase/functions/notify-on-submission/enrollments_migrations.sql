@@ -1,4 +1,6 @@
--- RUN THIS IN SUPABASE SQL EDITOR *BEFORE* GOING LIVE (the new form sends these columns)
+-- RUN THIS IN SUPABASE > SQL EDITOR > paste > Run. Safe to run more than once.
+-- It only ADDS columns to your existing enrollments table (nothing is deleted).
+
 alter table public.enrollments
   add column if not exists payment_option text,
   add column if not exists amount_due numeric default 0,
@@ -8,7 +10,13 @@ alter table public.enrollments
   add column if not exists course_start_date date,
   add column if not exists facilitator text,
   add column if not exists communication_status text,
-  add column if not exists certification_status text;
--- Outstanding balance, for your tracking view
-create or replace view public.enrollments_tracker as
-select *, (amount_due - amount_paid) as outstanding_balance from public.enrollments;
+  add column if not exists certification_status text,
+  add column if not exists member_type text default 'Public',
+  add column if not exists promo_code text,
+  add column if not exists balance_due_date date;
+
+-- Tracking view (created AFTER all columns exist so it includes them all)
+drop view if exists public.enrollments_tracker;
+create view public.enrollments_tracker as
+select *, (amount_due - amount_paid) as outstanding_balance
+from public.enrollments;
