@@ -17,6 +17,9 @@ alter table public.enrollments
 
 -- Tracking view (created AFTER all columns exist so it includes them all)
 drop view if exists public.enrollments_tracker;
-create view public.enrollments_tracker as
+create view public.enrollments_tracker with (security_invoker = on) as
 select *, (amount_due - amount_paid) as outstanding_balance
 from public.enrollments;
+
+-- Keep student data private: the public website key must never read this view
+revoke all on public.enrollments_tracker from anon;

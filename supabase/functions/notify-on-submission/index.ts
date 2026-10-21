@@ -12,6 +12,8 @@ const BUSINESS_OWNER_EMAIL = Deno.env.get("BUSINESS_OWNER_EMAIL")!;
 const FROM_EMAIL =
   Deno.env.get("FROM_EMAIL") ?? "J&M Leadership <hello@jandmcompanylimited.com>";
 const WEBHOOK_SECRET = Deno.env.get("WEBHOOK_SECRET")!;
+// Students are told to REPLY with proof of payment, so replies must go to a real inbox.
+const REPLY_TO = Deno.env.get("REPLY_TO_EMAIL") ?? BUSINESS_OWNER_EMAIL;
 
 async function sendEmail(to: string, subject: string, html: string) {
   const res = await fetch("https://api.resend.com/emails", {
@@ -20,7 +22,7 @@ async function sendEmail(to: string, subject: string, html: string) {
       Authorization: `Bearer ${RESEND_API_KEY}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ from: FROM_EMAIL, to, subject, html }),
+    body: JSON.stringify({ from: FROM_EMAIL, to, subject, html, reply_to: REPLY_TO }),
   });
 
   if (!res.ok) {
@@ -31,56 +33,83 @@ async function sendEmail(to: string, subject: string, html: string) {
   return res.ok;
 }
 
+// ===== EMAIL CONFIG (keep in sync with js/script.js CAMPAIGN) =====
+const PAYMENT_DEADLINE = "25 October 2026";   // first/one-off payment deadline
+const BALANCE_DEADLINE = "26 November 2026";  // installment completion deadline
+const CHURCH_INSTALLMENT = { initial: 10000, balance: 10000 };
+const PUBLIC_INSTALLMENT = { initial: 40000, balance: 35000 }; // PLACEHOLDER until the MD approves public installments
+const CERT_AFTER_FULL_PAYMENT = true;          // confirm with the MD
+const OFFER_NOTE = "Please note: This special offer is available for this year only.";
+const fmt = (n: number) => "&#8358;" + Number(n).toLocaleString("en-NG");
+const esc = (s: any) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
 function buildEnrollmentEmails(record: any) {
-  const { course, level, session, full_name, email, phone, payment_option, amount_due, member_type } = record;
+  const { course, level, session, full_name, payment_option, amount_due, member_type } = record;
   const isChurch = member_type === "Church";
   const isInst = payment_option === "Installment";
-  const scheduleHtml = isInst
-    ? (isChurch
-        ? `<li><strong>Installment plan:</strong> &#8358;10,000 now + &#8358;10,000 by 26 November 2026</li>`
-        : `<li><strong>Installment plan:</strong> initial payment now; full fee completed by 26 November 2026</li>`)
+  const plan = isChurch ? CHURCH_INSTALLMENT : PUBLIC_INSTALLMENT;
+
+  const bank = [
+    Deno.env.get("BANK_NAME") ?? "[BANK NAME]",
+    Deno.env.get("BANK_ACCOUNT_NAME") ?? "[ACCOUNT NAME]",
+    Deno.env.get("BANK_ACCOUNT_NUMBER") ?? "[ACCOUNT NUMBER]",
+  ].map(esc).join(" | ");
+
+  const total = fmt(amount_due ?? 0);
+  const offer = isChurch
+    ? "church member rate, certificate &amp; student package included"
+    : "50% off, certification included";
+
+  const planItem = isInst
+    ? `<li><strong>Installment Plan:</strong> ${fmt(plan.initial)} before ${PAYMENT_DEADLINE}, then ${fmt(plan.balance)} before ${BALANCE_DEADLINE}</li>`
     : "";
-  const bank = `${Deno.env.get("BANK_NAME") ?? "[BANK NAME]"} &middot; ${Deno.env.get("BANK_ACCOUNT_NAME") ?? "[ACCOUNT NAME]"} &middot; ${Deno.env.get("BANK_ACCOUNT_NUMBER") ?? "[ACCOUNT NUMBER]"}`;
-  const amount = Number(amount_due ?? 0).toLocaleString("en-NG");
+
+  const instructions = isInst
+    ? `<p>Please reply to this email with your proof of payment for your first installment (<strong>${fmt(plan.initial)}</strong>) before <strong>${PAYMENT_DEADLINE}</strong>.</p>
+       <p>Your balance of <strong>${fmt(plan.balance)}</strong> must be paid before <strong>${BALANCE_DEADLINE}</strong>. Please reply with proof of payment for it as well.</p>
+       <p>If a payment deadline is missed, your registration will remain incomplete until the full fee has been paid.${CERT_AFTER_FULL_PAYMENT ? " Your certificate will be issued after full payment." : ""}</p>`
+    : `<p>Please reply to this email with your proof of payment before <strong>${PAYMENT_DEADLINE}</strong>.</p>`;
 
   const userHtml = `
-    <h2>Thanks for registering, ${full_name}!</h2>
-    <p>We've received your request for:</p>
+    <h2>Thanks for registering, ${esc(full_name)}!</h2>
+    <p>We&rsquo;ve received your registration for:</p>
     <ul>
-      <li><strong>Course:</strong> ${course} &ndash; ${level} (${isChurch ? "church member rate, certificate &amp; student package included" : "50% off, certification included"})</li>
-      <li><strong>Session:</strong> ${session} &middot; Classes start 26 October 2026</li>
-      <li><strong>Payment option:</strong> ${payment_option}</li>
-      <li><strong>Total fee:</strong> &#8358;${amount}</li>
-      ${scheduleHtml}
+      <li><strong>Course:</strong> ${esc(level)} ${esc(course)} &mdash; ${offer}</li>
+      <li><strong>Session:</strong> ${esc(session)} Session 2026</li>
+      <li><strong>Payment Option:</strong> ${esc(payment_option)}</li>
+      <li><strong>Total Fee:</strong> ${total}</li>
+      ${planItem}
     </ul>
     <h3>Next step: make your payment</h3>
     <p>Bank transfer to: <strong>${bank}</strong></p>
-    <p>Please reply to this email with your proof of payment before <strong>23 October 2026</strong>.</p>
-    <p><strong>Important:</strong> your registration is only confirmed once payment has been verified.
-    You will then receive your confirmation, WhatsApp Channel link and onboarding details.</p>
-    <p>&mdash; J&amp;M Academy</p>
+    ${instructions}
+    <p>Your registration will only be confirmed once your payment has been verified.</p>
+    <p>Your class onboarding details, curriculum and timetable will be shared with you before the commencement of classes.</p>
+    <p>${OFFER_NOTE}</p>
+    <p>We&rsquo;re excited to have you join the J&amp;M learning community.</p>
+    <p>Warm regards,<br />J&amp;M Leadership &amp; Management Academy Team</p>
   `;
 
   const adminHtml = `
     <h2>New Enrollment Received</h2>
     <ul>
-      <li><strong>Name:</strong> ${full_name}</li>
-      <li><strong>Email:</strong> ${email}</li>
-      <li><strong>Phone:</strong> ${phone}</li>
-      <li><strong>Course:</strong> ${course} &ndash; ${level}</li>
-      <li><strong>Session:</strong> ${session}</li>
-      <li><strong>Member type:</strong> ${member_type ?? "Public"}${record.promo_code ? " (code: " + record.promo_code + ")" : ""}</li>
-      <li><strong>Payment option:</strong> ${payment_option}</li>
-      <li><strong>Total fee:</strong> &#8358;${amount}</li>
-      ${isInst ? `<li><strong>Balance due:</strong> 26 November 2026</li>` : ""}
+      <li><strong>Name:</strong> ${esc(full_name)}</li>
+      <li><strong>Email:</strong> ${esc(record.email)}</li>
+      <li><strong>Phone:</strong> ${esc(record.phone)}</li>
+      <li><strong>Course:</strong> ${esc(course)} &ndash; ${esc(level)}</li>
+      <li><strong>Session:</strong> ${esc(session)}</li>
+      <li><strong>Member type:</strong> ${esc(member_type ?? "Public")}${record.promo_code ? " (code: " + esc(record.promo_code) + ")" : ""}</li>
+      <li><strong>Payment option:</strong> ${esc(payment_option)}</li>
+      <li><strong>Total fee:</strong> ${total}</li>
+      ${isInst ? `<li><strong>Plan:</strong> ${fmt(plan.initial)} now + ${fmt(plan.balance)} by ${BALANCE_DEADLINE}</li>` : ""}
       <li><strong>Status:</strong> Pending payment verification</li>
     </ul>
   `;
 
   return {
-    userSubject: "Your J&M Academy Registration — Complete Your Payment",
+    userSubject: "J&M Academy Registration \u2013 Complete Your Payment",
     userHtml,
-    adminSubject: `New Enrollment: ${full_name} — ${course} (${level}) — ${payment_option}`,
+    adminSubject: `New Enrollment${isChurch ? " [CHURCH]" : ""}: ${full_name} \u2014 ${course} (${level}) \u2014 ${payment_option}`,
     adminHtml,
   };
 }

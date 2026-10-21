@@ -39,12 +39,11 @@ const CAMPAIGN = {
   originalFee: 150000,
   discountPercent: 50,
   startDate: "26 October 2026",
-  deadlineLabel: "23 October 2026",
-  deadlineISO: "2026-10-23T23:59:59+01:00", // registration closes end of day (Lagos)
+  deadlineLabel: "25 October 2026",
+  deadlineISO: "2026-10-25T23:59:59+01:00", // registration closes end of day (Lagos)
   session: "Spring",
   balanceDueLabel: "26 November 2026", // installment completion deadline (all students)
   balanceDueISO: "2026-11-26",
-  bank: { name: "[FIDELITY]", accountName: "[J&M LEADERSHIP AND MANAGEMENT ACACEMY LIMITED]", accountNumber: "[5601413757]" },
   missedPolicy: "Your registration stays incomplete until the full fee is paid.",
 
   // PUBLIC installment — Set approved:true ONLY after the MD approves the structure. Until then the option stays disabled.
@@ -85,13 +84,12 @@ function getPricing() {
   return { type: "Public", total: CAMPAIGN.salePrice, installmentOK: i.approved, initial: i.initial, count: i.count, each: i.each, certAfterFull: i.certAfterFullPayment };
 }
 
-// Fill prices/dates everywhere from the config
+// ---- Static fill (dates, public prices) ----
 document.querySelectorAll(".js-price-old").forEach((el) => (el.textContent = naira(CAMPAIGN.originalFee)));
 document.querySelectorAll(".js-price-new").forEach((el) => (el.textContent = naira(CAMPAIGN.salePrice)));
 document.querySelectorAll(".js-deadline").forEach((el) => (el.textContent = CAMPAIGN.deadlineLabel));
 document.querySelectorAll(".js-startdate").forEach((el) => (el.textContent = CAMPAIGN.startDate));
 
-// Installment option stays disabled until approved
 const optInstallment = document.getElementById("optInstallment");
 function refreshInstallmentOption() {
   if (!optInstallment) return;
@@ -147,27 +145,26 @@ function tryApplyCode(raw, fromLink) {
   return false;
 }
 
-// Payment summary shown under the dropdown
+// ---- Payment summary shown under the dropdown ----
 function renderPaymentSummary() {
   const box = document.getElementById("paymentSummary");
   const choice = document.getElementById("paymentOption")?.value;
   if (!box) return;
   if (!choice) { box.hidden = true; return; }
-  const p = getPricing(), b = CAMPAIGN.bank;
+  const p = getPricing();
   const rate = memberMode ? "Church member rate (course fee + certificate &amp; student package)" : "50% off, certification included";
-  const bank = `<p><b>Bank transfer:</b> ${b.name} &middot; ${b.accountName} &middot; ${b.accountNumber}</p>`;
+  const bank = `<p>Bank details will be sent to your email after you register.</p>`;
   if (choice === "One-off") {
-    box.innerHTML = `<p>Total (${rate}): <span class="amt">${naira(p.total)}</span></p>${bank}<p>Payment details will also be emailed to you. Your place is confirmed once payment is verified.</p>`;
+    box.innerHTML = `<p>Total (${rate}): <span class="amt">${naira(p.total)}</span></p>${bank}<p>Your place is confirmed once payment is verified.</p>`;
   } else {
     box.innerHTML = `<p>Total (${rate}): <span class="amt">${naira(p.total)}</span></p>
-      <p>Pay now: <b>${naira(p.initial)}</b> &middot; ${p.count} further installment of <b>${naira(p.each)}</b></p>
+      <p>Pay now: <b>${naira(p.initial)}</b> (before ${CAMPAIGN.deadlineLabel}) &middot; ${p.count} further installment of <b>${naira(p.each)}</b></p>
       <p>Final deadline for the full fee: <b>${CAMPAIGN.balanceDueLabel}</b></p>
       <p>${CAMPAIGN.missedPolicy}</p>
       ${p.certAfterFull ? "<p>Certificate is issued after full payment.</p>" : ""}${bank}`;
   }
   box.hidden = false;
 }
-
 document.getElementById("paymentOption")?.addEventListener("change", renderPaymentSummary);
 document.getElementById("applyCode")?.addEventListener("click", () => tryApplyCode(document.getElementById("memberCode").value));
 document.getElementById("memberCode")?.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); tryApplyCode(e.target.value); } });
