@@ -33,27 +33,27 @@ window.addEventListener("resize", () => {
 });
 
 // =====================================================================
-// CAMPAIGN CONFIG — the ONLY place to edit fee, dates, bank & installments
+// CAMPAIGN CONFIG — the ONLY place to edit fees, dates, bank & codes
 // =====================================================================
 const CAMPAIGN = {
   originalFee: 150000,
   discountPercent: 50,
-  startDate: "26 October 2026",
-  deadlineLabel: "25 October 2026",
-  deadlineISO: "2026-10-25T23:59:59+01:00", // registration closes end of day (Lagos)
+  // OPEN REGISTRATION: leave these three as null for no deadline / no start date shown.
+  // To set a deadline later, e.g.  startDate: "2 November 2026",  deadlineLabel: "30 October 2026",  deadlineISO: "2026-10-30T23:59:59+01:00"
+  startDate: null,
+  deadlineLabel: null,
+  deadlineISO: null, // registration closes end of day (Lagos) — null = never closes
   session: "Spring",
   balanceDueLabel: "26 November 2026", // installment completion deadline (all students)
   balanceDueISO: "2026-11-26",
   missedPolicy: "Your registration stays incomplete until the full fee is paid.",
 
-  // PUBLIC installment — Set approved:true ONLY after the MD approves the structure. Until then the option stays disabled.
+  // PUBLIC installment — stays disabled until the MD approves the amounts. Then set approved:true.
   installment: {
     approved: false,
     initial: 40000,
-    count: 2,
+    count: 1,
     each: 35000,
-    deadlines: ["26 October 2026 (initial)", "[DATE]"],
-    finalDate: "[DATE]",
     certAfterFullPayment: true,
   },
 
@@ -70,7 +70,11 @@ const CAMPAIGN = {
 };
 CAMPAIGN.salePrice = CAMPAIGN.originalFee * (1 - CAMPAIGN.discountPercent / 100);
 const naira = (n) => "\u20A6" + Number(n).toLocaleString("en-NG");
-const registrationClosed = () => new Date() > new Date(CAMPAIGN.deadlineISO);
+const registrationClosed = () => !!CAMPAIGN.deadlineISO && new Date() > new Date(CAMPAIGN.deadlineISO);
+const datesLine = () => [
+  CAMPAIGN.deadlineLabel ? `Registration closes <b>${CAMPAIGN.deadlineLabel}</b>` : "<b>Registration is now open</b>",
+  CAMPAIGN.startDate ? `Classes start <b>${CAMPAIGN.startDate}</b>` : "",
+].filter(Boolean).join(" &middot; ");
 
 // ---- Current pricing (public vs church) ----
 let memberMode = false;
@@ -87,8 +91,9 @@ function getPricing() {
 // ---- Static fill (dates, public prices) ----
 document.querySelectorAll(".js-price-old").forEach((el) => (el.textContent = naira(CAMPAIGN.originalFee)));
 document.querySelectorAll(".js-price-new").forEach((el) => (el.textContent = naira(CAMPAIGN.salePrice)));
-document.querySelectorAll(".js-deadline").forEach((el) => (el.textContent = CAMPAIGN.deadlineLabel));
-document.querySelectorAll(".js-startdate").forEach((el) => (el.textContent = CAMPAIGN.startDate));
+document.querySelectorAll(".promo-dates").forEach((el) => (el.innerHTML = datesLine()));
+const heroPill = document.querySelector(".hero-offer");
+if (heroPill) heroPill.innerHTML = `<b>50% OFF</b> Basic courses &middot; ` + (CAMPAIGN.deadlineLabel ? `enroll before <span style="white-space:nowrap">${CAMPAIGN.deadlineLabel}</span>` : "registration now open");
 
 const optInstallment = document.getElementById("optInstallment");
 function refreshInstallmentOption() {
@@ -110,7 +115,7 @@ function applyPricingMode() {
     if (!banner.dataset.orig) banner.dataset.orig = banner.innerHTML;
     banner.innerHTML = memberMode
       ? `<strong>Church member rate: ${naira(c.price)}</strong> per Basic course &mdash; ${naira(c.courseFee)} course fee + ${naira(c.certAndPackage)} certificate &amp; student package.
-         <span class="promo-dates">Registration closes <b>${CAMPAIGN.deadlineLabel}</b> &middot; Classes start <b>${CAMPAIGN.startDate}</b> &middot; Installment balance due <b>${CAMPAIGN.balanceDueLabel}</b></span>`
+         <span class="promo-dates">${datesLine()} &middot; Installment balance due <b>${CAMPAIGN.balanceDueLabel}</b></span>`
       : banner.dataset.orig;
   }
   const pill = document.querySelector(".hero-offer b");
@@ -158,7 +163,7 @@ function renderPaymentSummary() {
     box.innerHTML = `<p>Total (${rate}): <span class="amt">${naira(p.total)}</span></p>${bank}<p>Your place is confirmed once payment is verified.</p>`;
   } else {
     box.innerHTML = `<p>Total (${rate}): <span class="amt">${naira(p.total)}</span></p>
-      <p>Pay now: <b>${naira(p.initial)}</b> (before ${CAMPAIGN.deadlineLabel}) &middot; ${p.count} further installment of <b>${naira(p.each)}</b></p>
+      <p>Pay now: <b>${naira(p.initial)}</b> ${CAMPAIGN.deadlineLabel ? "(before " + CAMPAIGN.deadlineLabel + ")" : ""} &middot; ${p.count} further installment of <b>${naira(p.each)}</b></p>
       <p>Final deadline for the full fee: <b>${CAMPAIGN.balanceDueLabel}</b></p>
       <p>${CAMPAIGN.missedPolicy}</p>
       ${p.certAfterFull ? "<p>Certificate is issued after full payment.</p>" : ""}${bank}`;
@@ -432,7 +437,6 @@ function rotateHeroText() {
 }
 
 setInterval(rotateHeroText, 6000);
-
 
 // function rotateHeroText() {
 //   if (!heroHeading) return;
